@@ -7,10 +7,11 @@ namespace Project_DAW.Models
         [Key]
         public int Id { get; set; }
 
+        public string UserId { get; set; }
         public int Intrebare_ID { get; set; }
 
         public virtual Intrebare? Intrebare { get; set; }
-
+        public virtual ApplicationUser User { get; set; }
         [Required(ErrorMessage = "Comentariul trebuie sa aiba continut!!!")]
         public string Continut { get; set; }
 
