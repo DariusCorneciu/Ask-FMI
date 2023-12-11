@@ -244,7 +244,7 @@ namespace Project_DAW.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categorii");
+                    b.ToTable("Categorii", (string)null);
                 });
 
             modelBuilder.Entity("Project_DAW.Models.Comentariu", b =>
@@ -274,7 +274,7 @@ namespace Project_DAW.Data.Migrations
 
                     b.HasIndex("IntrebareId");
 
-                    b.ToTable("Comentarii");
+                    b.ToTable("Comentarii", (string)null);
                 });
 
             modelBuilder.Entity("Project_DAW.Models.Intrebare", b =>
@@ -307,7 +307,7 @@ namespace Project_DAW.Data.Migrations
 
                     b.HasIndex("SubCategorieId");
 
-                    b.ToTable("Intrebari");
+                    b.ToTable("Intrebari", (string)null);
                 });
 
             modelBuilder.Entity("Project_DAW.Models.Raspuns", b =>
@@ -336,7 +336,7 @@ namespace Project_DAW.Data.Migrations
                     b.HasIndex("IntrebareId")
                         .IsUnique();
 
-                    b.ToTable("Raspunsuri");
+                    b.ToTable("Raspunsuri", (string)null);
                 });
 
             modelBuilder.Entity("Project_DAW.Models.SubCategorie", b =>
@@ -358,7 +358,7 @@ namespace Project_DAW.Data.Migrations
 
                     b.HasIndex("CategorieId");
 
-                    b.ToTable("SubCategorii");
+                    b.ToTable("SubCategorii", (string)null);
                 });
 
             modelBuilder.Entity("Project_DAW.Models.ApplicationUser", b =>

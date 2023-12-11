@@ -13,6 +13,7 @@ namespace Project_DAW.Models
         [Required(ErrorMessage = "Numele Categoriei este necesar")]
         public string Title { get; set; }
         public virtual Categorie? Categorie { get; set; }
+        public virtual ICollection<Intrebare> Intrebari { get; set; }
 
     }
 }
