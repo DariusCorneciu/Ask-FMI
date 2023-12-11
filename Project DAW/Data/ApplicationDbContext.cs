@@ -10,6 +10,7 @@ namespace Project_DAW.Data
             : base(options)
         {
         }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Categorie> Categorii { get; set; }
         public DbSet<Comentariu> Comentarii { get; set; }
         public DbSet<Intrebare> Intrebari { get; set; }
