@@ -12,5 +12,6 @@ namespace Project_DAW.Models
         public DateTime Date { get; set; }
 
         public bool IsOpen { get; set; }
+        public virtual Raspuns? Raspuns { get; set; }
     }
 }
