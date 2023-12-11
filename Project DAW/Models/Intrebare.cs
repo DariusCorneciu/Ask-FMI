@@ -10,7 +10,13 @@ namespace Project_DAW.Models
         [Required(ErrorMessage = "Intrebarea trebuie sa fie adaugata!!!!")]
         public string Continut { get; set; }
         public DateTime Date { get; set; }
+        
+        public int SubCategorieId { get; set; }
+
+        public virtual SubCategorie? SubCategorie { get; set; }
 
         public bool IsOpen { get; set; }
+
+        public virtual ICollection<Comentariu> Comentarii { get; set; }
     }
 }

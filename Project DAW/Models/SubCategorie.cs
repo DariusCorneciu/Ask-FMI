@@ -9,9 +9,9 @@ namespace Project_DAW.Models
 
         public int CategorieId { get; set;}
 
-        public virtual Categorie Categorie { get; set; }
+        public virtual Categorie? Categorie { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Numele Categoriei este necesar")]
         public string Title { get; set; }
     }
 }
