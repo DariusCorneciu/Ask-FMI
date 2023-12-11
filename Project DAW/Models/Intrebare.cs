@@ -16,7 +16,5 @@ namespace Project_DAW.Models
         public virtual SubCategorie? SubCategorie { get; set; }
 
         public bool IsOpen { get; set; }
-
-        public virtual ICollection<Comentariu> Comentarii { get; set; }
     }
 }
