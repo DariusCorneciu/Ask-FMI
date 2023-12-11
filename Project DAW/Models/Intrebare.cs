@@ -12,11 +12,11 @@ namespace Project_DAW.Models
         public DateTime Date { get; set; }
         
         public int SubCategorieId { get; set; }
-
+        public bool IsOpen { get; set; }
         public virtual SubCategorie? SubCategorie { get; set; }
 
         public virtual ICollection<Comentariu>? Comentarii { get; set; }
         public virtual Raspuns? Raspuns { get; set; }
-        public bool IsOpen { get; set; }
+       
     }
 }
