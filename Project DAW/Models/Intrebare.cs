@@ -8,6 +8,8 @@ namespace Project_DAW.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Intrebarea trebuie sa aiba un nume!!!!")]
+        public string Name { get; set; }
 
         [Required(ErrorMessage = "Intrebarea trebuie sa fie adaugata!!!!")]
         public string Continut { get; set; }
