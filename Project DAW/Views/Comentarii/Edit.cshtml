@@ -1,0 +1,14 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model Project_DAW.Models.Comentariu
+<form method="post" action="/Comentarii/Edit/@Model.Id">
+    <label>Continut comentariu</label>
+    <br />
+    <textarea class="form-control" name="Continut" >@Model.Continut</textarea>
+    <br />
+    <button class="btn btn-success " type="submit">Editeaza comentariul</button>
+
+</form>

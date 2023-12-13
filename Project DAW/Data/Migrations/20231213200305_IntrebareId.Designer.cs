@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project_DAW.Data;
 
@@ -11,9 +12,10 @@ using Project_DAW.Data;
 namespace Project_DAW.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231213200305_IntrebareId")]
+    partial class IntrebareId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,7 +264,7 @@ namespace Project_DAW.Data.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("IntrebareId")
+                    b.Property<int>("IntrebareId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -335,9 +337,8 @@ namespace Project_DAW.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -424,7 +425,9 @@ namespace Project_DAW.Data.Migrations
                 {
                     b.HasOne("Project_DAW.Models.Intrebare", "Intrebare")
                         .WithMany("Comentarii")
-                        .HasForeignKey("IntrebareId");
+                        .HasForeignKey("IntrebareId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Project_DAW.Models.ApplicationUser", "User")
                         .WithMany("Comentarii")

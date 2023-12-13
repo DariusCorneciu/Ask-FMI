@@ -7,7 +7,7 @@ namespace Project_DAW.Models
         [Key]
         public int Id { get; set; }
         public int IntrebareId { get; set; }
-        public int UserId { get; set; }
+        public string ?UserId { get; set; }
         public DateTime Date { get; set; }
         [Required(ErrorMessage ="Nu poti sa dai un raspuns gol!")]
         public string Text { get; set; }

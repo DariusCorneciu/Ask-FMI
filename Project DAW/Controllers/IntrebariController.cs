@@ -41,8 +41,37 @@ namespace Project_DAW.Controllers
         }
         public IActionResult Show(int id)
         {
-            Intrebare intrebare = db.Intrebari.Include("Raspuns").Include("Comentarii").Where(q => q.Id == id).First();
+          //  TempData["Test"] = "E in SHow";
+            
+            Intrebare intrebare = db.Intrebari.Include("User").Include("Comentarii.User").Include("Raspuns").Include("Comentarii").Where(q => q.Id == id).First();
+            Ce_Rol();
             return View(intrebare);
+        }
+
+        [HttpPost]
+        [Authorize(Roles ="User")]
+        public IActionResult Show([FromForm] Comentariu comentariu)
+        {
+
+            comentariu.Date = DateTime.Now;
+            comentariu.UserId = _userManager.GetUserId(User);
+
+            if (ModelState.IsValid)
+            {
+                db.Comentarii.Add(comentariu);
+                db.SaveChanges();
+                Ce_Rol();
+                TempData["Test"] = "Este valid" + comentariu.Date+comentariu.IntrebareId+" "+ comentariu.Id;
+                return Redirect("/Intrebari/Show/"+comentariu.IntrebareId);
+            }
+            else
+            {
+                TempData["Test"] = "Nu este valid" + comentariu.Date + comentariu.IntrebareId + " " + comentariu.Id; 
+                Intrebare intrebare = db.Intrebari.Include("User").Include("Comentarii.User").Include("Comentarii").Include("Raspuns").Where(a => a.Id == comentariu.IntrebareId).First();
+                Ce_Rol();
+                return View(intrebare);
+            }
+
         }
         [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin")]
         public IActionResult New()
@@ -189,6 +218,16 @@ namespace Project_DAW.Controllers
                 TempData["messageType"] = "alert-danger";
                 return RedirectToAction("Index");
             }
+        }
+
+        private void Ce_Rol()
+        {
+
+            ViewBag.EsteMod = User.IsInRole("Moderator");
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
+            ViewBag.EsteUser = User.IsInRole("User");
+
+            ViewBag.UserCurent = _userManager.GetUserId(User);
         }
 
         public IEnumerable<SelectListItem> GetAllCategories(string rol)

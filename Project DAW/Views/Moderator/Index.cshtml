@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@if (TempData.ContainsKey("Exista"))
+{
+    <p>@TempData["Exista"]</p>
+}
+
+<div class="container">
+    <div class="row">
+        @if (ViewBag.intrebari_fara_raspuns != null)
+        {
+            @foreach (Project_DAW.Models.Intrebare intrebare in ViewBag.intrebari_fara_raspuns)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            @intrebare.Name
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title">@intrebare.Continut</h5>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" data-bs-target="#postContent_@intrebare.Id"
+                                    aria-expanded="false" aria-controls="postContent_@intrebare.Id">
+                                Raspunde
+                            </button>
+                            <div class="collapse" id="postContent_@intrebare.Id">
+                                <form method="post" action="/Moderator/Index">
+
+                                    <input type="hidden" name="IntrebareId" value="@intrebare.Id" />
+
+                                    <label>Continut comentariu</label>
+                                    <br />
+                                    <textarea class="form-control" name="Text"></textarea>
+                                    <br />
+                                    <button class="btn btn-success " type="submit">Adauga comentariul</button>
+
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+            
+        }
+        
+    </div>
+</div>
+
