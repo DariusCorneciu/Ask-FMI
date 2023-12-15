@@ -1,0 +1,20 @@
+﻿@model Project_DAW.Models.SubCategorie
+
+<h2> Adaugare SubCategorie</h2>
+
+@using (Html.BeginForm(actionName: "New", controllerName: "SubCategorii", method: FormMethod.Post))
+{
+
+    @Html.Label("Title", "Denumire SubCategorie")
+    <br />
+
+    @Html.TextBox("Title", null, new { @class = "form-control" })
+
+    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+    <br />
+    <br />
+
+    <button class="btn btn-success" type="submit">Adauga SubCategorie</button>
+
+}
+

@@ -10,7 +10,6 @@ namespace Project_DAW.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Intrebarea trebuie sa aiba un nume!!!!")]
         public string Name { get; set; }
-        public int IntrebareId { get; set; }
         [Required(ErrorMessage = "Intrebarea trebuie sa fie adaugata!!!!")]
         public string Continut { get; set; }
         public DateTime Date { get; set; }

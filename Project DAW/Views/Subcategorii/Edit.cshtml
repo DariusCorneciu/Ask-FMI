@@ -1,0 +1,19 @@
+﻿@model Project_DAW.Models.SubCategorie
+
+<h2> Editare subcategorie</h2>
+
+@using (Html.BeginForm(controllerName: "SubCategorii", actionName: "Edit", method: FormMethod.Post,
+      routeValues: new { id = Model.Id }))
+{
+    @Html.Label("Title", "Denumire SubCategorie")
+    <br />
+    @Html.Editor("Title")
+
+    @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
+    <br />
+
+    <br />
+
+    <button class="btn btn-success" type="submit">Modifica subcategorie</button>
+}
+

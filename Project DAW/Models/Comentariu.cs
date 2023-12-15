@@ -8,7 +8,7 @@ namespace Project_DAW.Models
         public int Id { get; set; }
 
         public string? UserId { get; set; }
-        public int ?IntrebareId { get; set; }
+        public int? IntrebareId { get; set; }
 
         public virtual Intrebare? Intrebare { get; set; }
         public virtual ApplicationUser? User { get; set; }

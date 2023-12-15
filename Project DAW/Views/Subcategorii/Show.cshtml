@@ -1,0 +1,30 @@
+﻿@model Project_DAW.Models.SubCategorie
+
+
+<h2>@ViewBag.Title</h2>
+
+<br />
+
+<p>@Model.Title</p>
+
+<p> @Model.Categorie.Name </p>
+
+@foreach(var intrebare in Model.Intrebari)
+{
+    <p> @intrebare.Name</p>
+    <a class="btn alert-success" href="/Intrebarii/Show/@intrebare.Id">Afisare intrebare</a>
+}
+
+<form method="post" action="/SubCategorii/Delete/@Model.Id">
+
+    <button class="btn btn-danger" type="submit">Sterge SubCategoria</button>
+
+</form>
+<br />
+
+<a class="btn alert-success" href="/Categories/Index/">Afisare lista intrebari</a>
+
+<br />
+<hr />
+<br />
+
