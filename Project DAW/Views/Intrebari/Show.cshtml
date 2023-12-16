@@ -26,15 +26,19 @@
                 <footer class="blockquote-footer">@comentariu.Date</footer>
             </blockquote>
         </div>
-        @if (comentariu.User.NormalizedUserName.ToUpper() == User.Identity.Name.ToUpper() || ViewBag.EsteAdmin || ViewBag.EsteMod)
+        @if (User.Identity.Name!= null)
         {
-            <a href="/Comentarii/Delete/@comentariu.Id" role="button" class="btn btn-outline-danger">Sterge Comentariu</a>
-        } 
-        @if (comentariu.User.NormalizedUserName.ToUpper() == User.Identity.Name.ToUpper())
-        {
-            <a href="/Comentarii/Edit/@comentariu.Id" role="button" class="btn btn-outline-info">Editeaza Comentariu</a>
-            
+            @if (comentariu.User.NormalizedUserName.ToUpper() == User.Identity.Name.ToUpper() || ViewBag.EsteAdmin || ViewBag.EsteMod)
+            {
+                <a href="/Comentarii/Delete/@comentariu.Id" role="button" class="btn btn-outline-danger">Sterge Comentariu</a>
+            }
+            @if (comentariu.User.NormalizedUserName.ToUpper() == User.Identity.Name.ToUpper())
+            {
+                <a href="/Comentarii/Edit/@comentariu.Id" role="button" class="btn btn-outline-info">Editeaza Comentariu</a>
+
+            }
         }
+        
     </div>
 }
 <br />
