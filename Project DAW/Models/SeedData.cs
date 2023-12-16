@@ -1,7 +1,6 @@
 ﻿using Project_DAW.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Project_DAW.Data;
 
 // PASUL 4 - useri si roluri
 
@@ -138,7 +137,6 @@ namespace Project_DAW.Models
                            UserId = "8e445865-a24d-4543-a6c6-9443d048cdb5"
                        }
                 );
-
                 context.SaveChanges();
 
             }

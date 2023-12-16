@@ -43,8 +43,8 @@ namespace Project_DAW.Controllers
         {
           //  TempData["Test"] = "E in SHow";
             
-            Intrebare intrebare = db.Intrebari.Include("User").Include("Comentarii.User").Include("Raspuns").Include("Comentarii").Where(q => q.Id == id).First();
-            Ce_Rol();
+            Intrebare intrebare = db.Intrebari.Include("User").Include("Raspuns").Include("Comentarii").Where(q => q.Id == id).First();
+            GetRole();
             return View(intrebare);
         }
 
@@ -60,7 +60,7 @@ namespace Project_DAW.Controllers
             {
                 db.Comentarii.Add(comentariu);
                 db.SaveChanges();
-                Ce_Rol();
+                GetRole();
                 TempData["Test"] = "Este valid" + comentariu.Date+comentariu.IntrebareId+" "+ comentariu.Id;
                 return Redirect("/Intrebari/Show/"+comentariu.IntrebareId);
             }
@@ -68,7 +68,7 @@ namespace Project_DAW.Controllers
             {
                 TempData["Test"] = "Nu este valid" + comentariu.Date + comentariu.IntrebareId + " " + comentariu.Id; 
                 Intrebare intrebare = db.Intrebari.Include("User").Include("Comentarii.User").Include("Comentarii").Include("Raspuns").Where(a => a.Id == comentariu.IntrebareId).First();
-                Ce_Rol();
+                GetRole();
                 return View(intrebare);
             }
 
@@ -220,7 +220,7 @@ namespace Project_DAW.Controllers
             }
         }
 
-        private void Ce_Rol()
+        private void GetRole()
         {
 
             ViewBag.EsteMod = User.IsInRole("Moderator");

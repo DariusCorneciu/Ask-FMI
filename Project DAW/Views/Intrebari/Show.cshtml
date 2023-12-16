@@ -12,6 +12,20 @@
         <p class="card-text">@Model.Continut</p>
         <a href="/Intrebari/Index" class="btn btn-primary">Inapoi</a>
     </div>
+    @if (Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
+    {
+        <div class="d-flex flex-row justify-content-between p-3 border-1 border-top">
+
+            <a class="btn btn-success" href="/Intrebari/Edit/@Model.Id">Editeaza intrebare</a>
+
+            <form method="post" action="/Intrebari/Delete/@Model.Id">
+
+                <button class="btn btn-danger" type="submit">Sterge intrebare</button>
+
+            </form>
+
+        </div>
+    }
 </div>
 
 @foreach(var comentariu in Model.Comentarii)

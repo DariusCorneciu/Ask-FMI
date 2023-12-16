@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿<h2 class="text-center">Afisare intrebari</h2>
+
+<br />
+
+@if (TempData["message"] != null)
+{
+    <div class="alert @ViewBag.Alert p-3 rounded-3 text-center mb-5">
+        @ViewBag.Message
+    </div>
 }
+
+<br />
+
+@foreach (Project_DAW.Models.Intrebare intrebare in ViewBag.Intrebari)
+{
+    <div class="card">
+
+        <div class="card-body">
+
+            <h3 class="card-title alert-success py-3 px-3 rounded-2">@intrebare.Name</h3>
+
+            <div class="card-text">@intrebare.Continut</div>
+
+            <div class="d-flex justify-content-between flex-row mt-5">
+
+                <a class="btn btn-success" href="/Intrebari/Show/@intrebare.Id">Afisare intrebare</a>
+
+                <span class="alert-success">@intrebare.Date</span>
+
+        </div>
+
+    </div>
+
+
+    </div>
+
+    <br />
+    <br />
+}
+
+
