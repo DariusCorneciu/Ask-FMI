@@ -1,0 +1,69 @@
+﻿@model List<String>
+@{
+    int i = 0;
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+
+            <ul class="nav flex-column ">
+                <li class="nav-item">
+                <strong> Admin Pannel</strong>   
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/Categorii/Index">Categorii</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/SubCateogrii/Index">SubCateogrii</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Useri(Soon)</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Reclamatii(Soon)</a>
+                </li>
+            </ul>
+            
+        </div>
+        <div class="col-md-9">
+           
+            <div class="container text-center ">
+                <div class="row row-cols-3 g-3">
+                    
+
+                    @foreach (Project_DAW.Models.ApplicationUser mod in ViewBag.Moderatori)
+                    {
+                                              
+                        <div class="col">
+                            <div class="card border-light mb-3" style="max-width: 18rem;">
+                                <div class="card-header">
+                                    <img sizes="" class="rounded-circle" alt="avatar1" src="@Model[i]" style="width: 50px; height: 50px;" />
+                                    @mod.FirstName @mod.LastName
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">@mod.Email</h5>
+                                    <p class="card-text"></p>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                    <a role="button" class="btn btn-outline-info" href="Show/@mod.Id">Show</a>
+                                </div>
+
+                            </div>
+                        </div>
+                        i++;
+                    }
+                    
+                </div>
+            </div>
+        
+
+
+        </div>
+    </div>
+</div>
+
+

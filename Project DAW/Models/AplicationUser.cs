@@ -10,10 +10,12 @@ namespace Project_DAW.Models
         public virtual ICollection<Comentariu>? Comentarii { get; set; }
 
         public virtual ICollection<Intrebare>? Intrebari { get; set; }
-
-        
+        public virtual ICollection<Imagine>? Imagini { get; set; }
+        public bool ProfilePicture { get; set; }
+        public bool BackroundPicture {  get; set; }
         // atribute suplimentare adaugate pentru user
         public string? FirstName { get; set; }
+        public DateTime JoinDate {  get; set; }
 
         public string? LastName { get; set; }
 

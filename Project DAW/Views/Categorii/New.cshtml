@@ -2,6 +2,12 @@
 
 <h2> Adaugare Categorie</h2>
 
+
+@if (TempData.ContainsKey("Test"))
+{
+    <p>@TempData["Test"]</p>
+}
+
 @using (Html.BeginForm(actionName: "New", controllerName: "Categorii", method: FormMethod.Post))
 {
 

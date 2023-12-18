@@ -32,10 +32,12 @@ namespace Project_DAW.Controllers
         {
             Categorie category = db.Categorii.Include("SubCategorii").Where(s => s.Id == id).First();
             ViewBag.Categorii = category;
-            return View();
+            
+            return View(category);
         }
         public ActionResult New() 
         {
+
             return View();
         }
         [HttpPost]
@@ -50,6 +52,10 @@ namespace Project_DAW.Controllers
             }
             else
             {
+                foreach (var modelError in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    TempData["Test"] = "Eroare în model: " + modelError.ErrorMessage;
+                }
                 return View(categorie);
             }
         }

@@ -1,0 +1,46 @@
+﻿@model Project_DAW.Models.ApplicationUser
+
+@if (TempData.ContainsKey("Remove"))
+{
+    <p>@TempData["Remove"]</p>
+}
+<img sizes="" class="rounded" alt="avatar1" src="@ViewBag.Src" style="width: 200px; height: 200px;" />
+<ul class="list-group list-group-flush">
+    <li class="list-group-item">@Model.FirstName @Model.LastName</li>
+    <li class="list-group-item">@Model.Email</li>
+    @if(Model.PhoneNumber != null)
+    {
+        <li class="list-group-item">@Model.PhoneNumber</li>
+    }
+    else
+    {
+        <li class="list-group-item">Moderatorul nu are numarul de telefon pe site</li>
+    }
+    <li class="list-group-item">Cont creeat in data de: @Model.JoinDate</li>
+</ul>
+<a class="btn btn-danger" href="/Admin/Remove/@Model.Id">Scoate din functie!</a>
+<br />
+<strong>@Model.FirstName a raspuns la @ViewBag.nrrasp</strong>
+@if (ViewBag.Raspunsuri != null)
+{
+    foreach(Project_DAW.Models.Raspuns raspuns in ViewBag.Raspunsuri)
+    {
+        <ul class="list-group">
+            @if(raspuns.Intrebare != null){
+                <li class="list-group-item active" aria-current="true">Intrebare: @raspuns.Intrebare.Name</li>
+
+            
+            <li class="list-group-item">Raspuns: @raspuns.Text</li>
+            <li class="list-group-item">
+                <a class="btn btn-success" href="/Intrebari/Show/@raspuns.Intrebare.Id">Afisare intrebare</a>
+            </li>
+           
+            <li class="list-group-item">
+                    <a class="btn btn-success" href="/Admin/ReopenQuestion/@raspuns.Intrebare.Id">Redeschide intrebarea</a>
+            </li>
+            }
+        </ul>
+
+    }
+
+}

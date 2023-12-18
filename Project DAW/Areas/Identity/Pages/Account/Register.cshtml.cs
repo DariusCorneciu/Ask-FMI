@@ -98,6 +98,11 @@ namespace Project_DAW.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required(ErrorMessage ="Nu poti lasa campul gol")]
+            public string FirstName { get; set; }
+            [Required(ErrorMessage = "Nu poti lasa campul gol")]
+            public string LastName { get; set; }    
         }
 
 
@@ -117,6 +122,10 @@ namespace Project_DAW.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                
+                user.JoinDate = DateTime.Now;
+                user.FirstName = Input.FirstName.Substring(0,1).ToUpper() + Input.FirstName.Substring(1).ToLower();
+                user.LastName = Input.LastName.Substring(0, 1).ToUpper() + Input.LastName.Substring(1).ToLower();
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

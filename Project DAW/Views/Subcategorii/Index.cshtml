@@ -13,10 +13,10 @@
 
 <br />
 
-@foreach (var categorie in ViewBag.Categorii)
+@foreach (Project_DAW.Models.SubCategorie categorie in ViewBag.Subcategorii)
 {
     @Html.Label("Name", "Nume categorie")
-    <p>@categorie.Name</p>
+    <p>@categorie.Title</p>
     <a class="btn alert-success" href="/SubCategorii/Show/@categorie.Id">Afisare SubCategorie</a>
     <a class="btn alert-success" href="/SubCategorii/Edit/@categorie.Id">Editare SubCategorie</a>
     <br />

@@ -1,6 +1,7 @@
 ﻿using Project_DAW.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 // PASUL 4 - useri si roluri
 
@@ -48,6 +49,9 @@ namespace Project_DAW.Models
                         UserName = "admin@test.com",
                         EmailConfirmed = true,
                         NormalizedEmail = "ADMIN@TEST.COM",
+                        FirstName = "Admin",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         Email = "admin@test.com",
                         NormalizedUserName = "ADMIN@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "Admin1!")
@@ -57,6 +61,9 @@ namespace Project_DAW.Models
                         Id = "8e445865-a24d-4543-a6c6-9443d048cdb1", // primary key
                         UserName = "mod@test.com",
                         EmailConfirmed = true,
+                        FirstName = "Moderator",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         NormalizedEmail = "MOD@TEST.COM",
                         Email = "mod@test.com",
                         NormalizedUserName = "MOD@TEST.COM",
@@ -68,6 +75,9 @@ namespace Project_DAW.Models
                         UserName = "user@test.com",
                         EmailConfirmed = true,
                         NormalizedEmail = "USER@TEST.COM",
+                        FirstName = "User",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         Email = "user@test.com",
                         NormalizedUserName = "USER@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User1!")
@@ -78,6 +88,9 @@ namespace Project_DAW.Models
                         UserName = "usera@test.com",
                         EmailConfirmed = true,
                         NormalizedEmail = "USERA@TEST.COM",
+                        FirstName = "Admitere",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         Email = "usera@test.com",
                         NormalizedUserName = "USERA@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User2!")
@@ -88,6 +101,9 @@ namespace Project_DAW.Models
                         UserName = "userl@test.com",
                         EmailConfirmed = true,
                         NormalizedEmail = "USERL@TEST.COM",
+                        FirstName = "Licenta",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         Email = "userl@test.com",
                         NormalizedUserName = "USERL@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User3!")
@@ -98,6 +114,9 @@ namespace Project_DAW.Models
                         UserName = "userm@test.com",
                         EmailConfirmed = true,
                         NormalizedEmail = "USERM@TEST.COM",
+                        FirstName = "Master",
+                        LastName = "Test",
+                        JoinDate = DateTime.Now,
                         Email = "userm@test.com",
                         NormalizedUserName = "USERM@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User4!")
@@ -140,6 +159,8 @@ namespace Project_DAW.Models
                 context.SaveChanges();
 
             }
+        
         }
+        
     }
 }

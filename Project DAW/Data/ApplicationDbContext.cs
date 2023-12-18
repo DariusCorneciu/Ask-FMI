@@ -12,6 +12,8 @@ namespace Project_DAW.Data
         }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Categorie> Categorii { get; set; }
+        public DbSet<Imagine> Imagini { get; set; }
+
         public DbSet<Comentariu> Comentarii { get; set; }
         public DbSet<Intrebare> Intrebari { get; set; }
         public DbSet<Raspuns> Raspunsuri { get; set; }

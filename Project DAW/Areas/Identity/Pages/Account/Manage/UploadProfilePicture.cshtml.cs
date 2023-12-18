@@ -9,19 +9,24 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Project_DAW.Data;
 using Project_DAW.Models;
 
 namespace Project_DAW.Areas.Identity.Pages.Account.Manage
 {
-    public class IndexModel : PageModel
+    public class UploadProfilePictureModel : PageModel
     {
+        private readonly ApplicationDbContext db;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public IndexModel(
+        public UploadProfilePictureModel(ApplicationDbContext context,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager
+            )
         {
+            db = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -56,22 +61,21 @@ namespace Project_DAW.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Phone]
-            [Display(Name = "Phone number")]
-            public string PhoneNumber { get; set; }
+            [Required(ErrorMessage ="Nu poti da submit la nimic!")]
+            [Display(Name ="Poza de profil")]
+            public IFormFile Imagine { get; set; }
+
         }
 
         private async Task LoadAsync(ApplicationUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+          
 
             Username = userName;
 
-            Input = new InputModel
-            {
-                PhoneNumber = phoneNumber
-            };
+           
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -93,27 +97,65 @@ namespace Project_DAW.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+            
 
             if (!ModelState.IsValid)
             {
                 await LoadAsync(user);
                 return Page();
             }
+            Imagine img = new Imagine();
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+           if(user.ProfilePicture)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                var old = db.Imagini.Where(imga => imga.UserId == user.Id).Where(imga => imga.Usage == "Profile");
+                StatusMessage = "Ti-am sters automat poza vechie de profil si am inlocuito cu cea noua";
+                user.ProfilePicture = false;
+                foreach(Imagine oldimg in old)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
-                    return RedirectToPage();
+                    user.Imagini.Remove(oldimg);
                 }
+                
             }
+            else
+            {
+                StatusMessage = "Ti-am adaugat noua poza de profil <3";
+            }
+            try
+            {
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    await Input.Imagine.CopyToAsync(memoryStream);
+                    img.ImageData = memoryStream.ToArray();
+                }
+
+                img.Name = Input.Imagine.FileName;
+                if(((float)Input.Imagine.Length)/1000 > 250)
+                {
+                    StatusMessage = "Error : Dimensiunile fisierului sunt prea mari!";
+                    return Page();
+
+                }
+                img.Type = Input.Imagine.ContentType;
+                img.UserId = user.Id;
+                img.Usage = "Profile";
+                img.Size = Input.Imagine.Length;
+                user.ProfilePicture = true;
+                db.Imagini.Add(img);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Error uploading image: {ex.Message}");
+                return Page();
+            }
+
             
 
+
+
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
             return RedirectToPage();
         }
     }
