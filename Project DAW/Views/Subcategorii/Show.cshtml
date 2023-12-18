@@ -12,17 +12,20 @@
 @foreach(var intrebare in Model.Intrebari)
 {
     <p> @intrebare.Name</p>
-    <a class="btn alert-success" href="/Intrebarii/Show/@intrebare.Id">Afisare intrebare</a>
+    <a class="btn alert-success" href="/Intrebari/Show/@intrebare.Id">Afisare intrebare</a>
 }
 
-<form method="post" action="/SubCategorii/Delete/@Model.Id">
+@if(ViewBag.EsteAdmin == true)
+{
+    <form method="post" action="/SubCategorii/Delete/@Model.Id">
 
-    <button class="btn btn-danger" type="submit">Sterge SubCategoria</button>
+        <button class="btn btn-danger" type="submit">Sterge SubCategoria</button>
+        
+    </form>
+    <br />
+}
 
-</form>
-<br />
 
-<a class="btn alert-success" href="/Categories/Index/">Afisare lista intrebari</a>
 
 <br />
 <hr />

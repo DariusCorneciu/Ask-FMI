@@ -11,20 +11,20 @@
 
                 @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-                @Html.Label("Title", "Titlu intrebare")
+                @Html.Label("Name", "Titlu intrebare")
                 <br />
-                @Html.TextBox("Title", null, new { @class = "form-control" })
+                @Html.TextBox("Name", null, new { @class = "form-control" })
 
                 @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
                 <br />
 
                 <br />
 
-                @Html.Label("Content", "Continut intrebare")
+                @Html.Label("Continut", "Continut intrebare")
                 <br />
-                @Html.TextArea("Content", null, new { @class = "form-control" })
+                @Html.TextArea("Continut", null, new { @class = "form-control" })
 
-                @Html.ValidationMessage("Content", null, new { @class = "text-danger" })
+                @Html.ValidationMessage("Continut", null, new { @class = "text-danger" })
                 <br />
 
                 <br />

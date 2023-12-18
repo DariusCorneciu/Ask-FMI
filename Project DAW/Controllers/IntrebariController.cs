@@ -32,6 +32,8 @@ namespace Project_DAW.Controllers
             var intrebari = db.Intrebari.Include("Raspuns");
 
             ViewBag.intrebari = intrebari;
+            TempData["Source"] = "Intrebari";
+
             if (TempData.ContainsKey("message"))
             {
                 ViewBag.Message = TempData["message"];
@@ -41,20 +43,27 @@ namespace Project_DAW.Controllers
         }
         public IActionResult Show(int id)
         {
-          //  TempData["Test"] = "E in SHow";
-            
-            Intrebare intrebare = db.Intrebari.Include("User").Include("Raspuns").Include("Comentarii").Where(q => q.Id == id).First();
+            //  TempData["Test"] = "E in SHow";
+
+            Intrebare intrebare = db.Intrebari
+                                .Include(q => q.Comentarii)
+                                .ThenInclude(c => c.User)
+                                .Include(q => q.User)
+                                .Include(q => q.Raspuns)
+                                .Where(q => q.Id == id)
+                                .First();
+            ViewBag.Intoarcere = TempData["Source"];
             GetRole();
             return View(intrebare);
         }
 
         [HttpPost]
-        [Authorize(Roles ="User")]
         public IActionResult Show([FromForm] Comentariu comentariu)
         {
-
+             
             comentariu.Date = DateTime.Now;
             comentariu.UserId = _userManager.GetUserId(User);
+            comentariu.User = db.Users.Where(u => u.Id  == comentariu.UserId).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
@@ -73,7 +82,7 @@ namespace Project_DAW.Controllers
             }
 
         }
-        [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin")]
+        [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin,User")]
         public IActionResult New()
         {
             Intrebare intrebare = new Intrebare();
@@ -90,15 +99,24 @@ namespace Project_DAW.Controllers
             {
                 intrebare.SubCateg = GetAllCategories("Admitere");
             }
+            else if(User.IsInRole("Admin"))
+            {
+                intrebare.SubCateg = GetAllCategories("Admin");
+            }
+            else if(User.IsInRole("Moderator"))
+            {
+                intrebare.SubCateg = GetAllCategories("Admin");
+            }
             return View(intrebare);
          }
         [HttpPost]
-        [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin")]
+        [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin,User")]
 
         public IActionResult New(Intrebare intrebare)
         {
             intrebare.Date = DateTime.Now;
             intrebare.UserId = _userManager.GetUserId(User);
+            intrebare.IsOpen = true;
             if(ModelState.IsValid)
             {
                 db.Intrebari.Add(intrebare);
@@ -120,6 +138,10 @@ namespace Project_DAW.Controllers
                 else if (User.IsInRole("Admitere"))
                 {
                     intrebare.SubCateg = GetAllCategories("Admitere");
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Admin");
                 }
                 return View(intrebare);
             }
@@ -152,7 +174,7 @@ namespace Project_DAW.Controllers
                 return RedirectToAction("Index");
             }
         }
-
+        [HttpPost]
         [Authorize(Roles = "Admitere,Licenta,Master,Admin")]
         public IActionResult Edit(int id, Intrebare returnedq)
         {
@@ -225,7 +247,20 @@ namespace Project_DAW.Controllers
 
             ViewBag.EsteMod = User.IsInRole("Moderator");
             ViewBag.EsteAdmin = User.IsInRole("Admin");
-            ViewBag.EsteUser = User.IsInRole("User");
+            ViewBag.EsteUser = User.IsInRole("User") || User.IsInRole("Admitere") || User.IsInRole("Admin") || User.IsInRole("Moderator") || User.IsInRole("Master") || User.IsInRole("Licenta");
+
+            ViewBag.UserCurent = _userManager.GetUserId(User);
+        }
+        private void SetAccessRights()
+        {
+            ViewBag.AfisareButoane = false;
+
+            if (User.IsInRole("Moderator"))
+            {
+                ViewBag.AfisareButoane = true;
+            }
+
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
 
             ViewBag.UserCurent = _userManager.GetUserId(User);
         }
@@ -233,10 +268,13 @@ namespace Project_DAW.Controllers
         public IEnumerable<SelectListItem> GetAllCategories(string rol)
         {
             var selectList = new List<SelectListItem>();
-
-            var subcategorii = from subcat in db.SubCategorii.Include("Categorii").Where(sb => sb.Categorie.Name == rol)
+            var subcategorii = from subcat in db.SubCategorii.Include("Categorie").Where(sb => sb.Categorie.Name == rol)
                                select subcat;
-
+            if (rol == "Admin")
+            {
+                subcategorii = from subcat in db.SubCategorii.Include("Categorie")
+                                   select subcat;
+            }
             foreach (var subcategorie in subcategorii)
             {
                 selectList.Add(new SelectListItem

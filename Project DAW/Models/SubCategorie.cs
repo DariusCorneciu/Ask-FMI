@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Project_DAW.Models
 {
@@ -12,7 +14,10 @@ namespace Project_DAW.Models
         [Required(ErrorMessage = "Numele Categoriei este necesar")]
         public string Title { get; set; }
         public virtual Categorie? Categorie { get; set; }
-        public virtual ICollection<Intrebare> Intrebari { get; set; }
+
+        [NotMapped]
+        public IEnumerable<SelectListItem>? Categ { get; set; }
+        public virtual ICollection<Intrebare>? Intrebari { get; set; }
 
     }
 }

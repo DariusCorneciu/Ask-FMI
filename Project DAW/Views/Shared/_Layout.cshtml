@@ -21,18 +21,22 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Categorii" asp-action="Index">Afisare Categorii</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+                        @if (User.IsInRole("User") || User.IsInRole("Admitere") || User.IsInRole("Licenta") || User.IsInRole("Master"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="Index">Afisare Intrebari</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="New">Adauga Intrebare</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Moderator") && User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Moderator" asp-action="Index">Mod Pannel</a>
                             </li>
-
-
                         }
                         @if (User.IsInRole("Admin"))
                         {

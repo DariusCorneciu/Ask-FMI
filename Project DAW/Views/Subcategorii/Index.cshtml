@@ -6,11 +6,12 @@
 }
 
 <br />
-
-<div class="align-items-center justify-content-center d-flex">
-    <a class="btn btn-success" href="/SubCategorii/New">Adauga o noua subcategorie</a>
-</div>
-
+@if (ViewBag.EsteAdmin == true)
+{
+    <div class="align-items-center justify-content-center d-flex">
+        <a class="btn btn-success" href="/SubCategorii/New">Adauga o noua subcategorie</a>
+    </div>
+}
 <br />
 
 @foreach (Project_DAW.Models.SubCategorie categorie in ViewBag.Subcategorii)
@@ -18,8 +19,11 @@
     @Html.Label("Name", "Nume categorie")
     <p>@categorie.Title</p>
     <a class="btn alert-success" href="/SubCategorii/Show/@categorie.Id">Afisare SubCategorie</a>
-    <a class="btn alert-success" href="/SubCategorii/Edit/@categorie.Id">Editare SubCategorie</a>
-    <br />
+    @if(ViewBag.EsteAdmin == true)
+    {
+        <a class="btn alert-success" href="/SubCategorii/Edit/@categorie.Id">Editare SubCategorie</a>
+        <br />
+    }
     <hr />
     <br />
 }

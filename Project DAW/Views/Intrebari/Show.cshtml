@@ -10,7 +10,14 @@
     </div>
     <div class="card-body">
         <p class="card-text">@Model.Continut</p>
-        <a href="/Intrebari/Index" class="btn btn-primary">Inapoi</a>
+        @if (ViewBag.Intoarcere == "SubCategorii")
+        {
+            <a href="/SubCategorii/Show/@TempData["IdSC"]" class="btn btn-primary">Inapoi</a>
+        }
+        else
+        {
+            <a href="/Intrebari/Index" class="btn btn-primary">Inapoi</a>
+        }
     </div>
     @if (Model.UserId == ViewBag.UserCurent || ViewBag.EsteAdmin)
     {
@@ -32,7 +39,7 @@
 {
     <div class="card">
         <div class="card-header">
-            @comentariu.User.NormalizedUserName
+            @comentariu.User.UserName
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">
