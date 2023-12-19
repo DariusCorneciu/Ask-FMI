@@ -83,29 +83,35 @@ namespace Project_DAW.Controllers
 
         }
         [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin,User")]
-        public IActionResult New()
+        public IActionResult New(int? idsc)
         {
             Intrebare intrebare = new Intrebare();
-
-            if (User.IsInRole("Licenta"))
+            if (idsc != null)
             {
-                intrebare.SubCateg = GetAllCategories("Licenta");
+                intrebare.SubCategorieId = idsc;
             }
-            else if(User.IsInRole("Master"))
+            else
             {
-                intrebare.SubCateg = GetAllCategories("Master");
-            }
-            else if (User.IsInRole("Admitere"))
-            {
-                intrebare.SubCateg = GetAllCategories("Admitere");
-            }
-            else if(User.IsInRole("Admin"))
-            {
-                intrebare.SubCateg = GetAllCategories("Admin");
-            }
-            else if(User.IsInRole("Moderator"))
-            {
-                intrebare.SubCateg = GetAllCategories("Admin");
+                if (User.IsInRole("Licenta"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Licenta");
+                }
+                else if (User.IsInRole("Master"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Master");
+                }
+                else if (User.IsInRole("Admitere"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Admitere");
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Admin");
+                }
+                else if (User.IsInRole("Moderator"))
+                {
+                    intrebare.SubCateg = GetAllCategories("Admin");
+                }
             }
             return View(intrebare);
          }
@@ -150,7 +156,8 @@ namespace Project_DAW.Controllers
         [Authorize(Roles = "Admitere,Licenta,Master,Admin")]
         public IActionResult Edit(int id)
         {
-            Intrebare intrebare = db.Intrebari.Include("Raspunsuri").Where(i => i.Id == id).First();
+            
+            Intrebare intrebare = db.Intrebari.Where(i => i.Id == id).First();
             if (User.IsInRole("Licenta"))
             {
                 intrebare.SubCateg = GetAllCategories("Licenta");
@@ -165,6 +172,7 @@ namespace Project_DAW.Controllers
             }
             if (intrebare.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
+                intrebare.SubCateg = GetAllCategories("Admin");
                 return View(intrebare);
             }
             else
@@ -221,15 +229,30 @@ namespace Project_DAW.Controllers
         [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin")]
         public ActionResult Delete(int id)
         {
-            Intrebare intrebare = db.Intrebari.Include("Raspunsuri").Include("Comentarii")
+
+            
+                Intrebare intrebare = db.Intrebari.Include(i=>i.Raspuns).Include(i=>i.Comentarii)
                                          .Where(art => art.Id == id)
                                          .First();
 
+            
+            
             if (intrebare.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin"))
             {
                 db.Intrebari.Remove(intrebare);
+                if(intrebare.Raspuns != null)
+                {
+                    db.Raspunsuri.Remove(intrebare.Raspuns);
+                }
+                if(intrebare.Comentarii != null)
+                {
+                    foreach(Comentariu comentariu in intrebare.Comentarii)
+                    {
+                        db.Comentarii.Remove(comentariu);
+                    }
+                }
                 db.SaveChanges();
-                TempData["message"] = "Articolul a fost sters";
+                TempData["message"] = "Intrebarea a fost stearsa";
                 TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }

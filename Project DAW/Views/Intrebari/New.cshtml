@@ -28,14 +28,16 @@
                 <br />
 
                 <br />
-
-                <label>Selectati categoria</label>
-                @Html.DropDownListFor(m => m.SubCategorieId, new SelectList(Model.SubCateg, "Value", "Text"),
+                @if (Model.SubCategorieId == null)
+                {
+                    <label>Selectati categoria</label>
+                    @Html.DropDownListFor(m => m.SubCategorieId, new SelectList(Model.SubCateg, "Value", "Text"),
             "Selectati categoria", new { @class = "form-control" })
 
-                @Html.ValidationMessageFor(m => m.SubCategorieId, null, new { @class = "text-danger" })
-                <br />
-
+                    @Html.ValidationMessageFor(m => m.SubCategorieId, null, new { @class = "text-danger" })
+                    <br />
+                }
+               
                 <br />
 
                 <button class="btn btn-success" type="submit">Adauga intrebare</button>

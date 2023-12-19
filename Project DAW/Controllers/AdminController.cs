@@ -115,11 +115,14 @@ namespace Project_DAW.Controllers
                 db.Raspunsuri.Remove(intrebare.Raspuns);
                 intrebare.IsOpen = true;
                 db.SaveChanges();
+                TempData["message-alert"] = "alert alert-succes";
+                TempData["Reopen"] = "Intrebarea a fost redeschisa cu succes";
                 return Redirect("/Admin/Show/" + mod);
 
-
             }
-            else { 
+            else {
+                TempData["message-alert"] = "alert alert-danger";
+
                 TempData["Reopen"] = "A aparut o eroare la redeschiderea intrebarii!"; 
                 return RedirectToAction("Index"); 
             }
@@ -135,13 +138,18 @@ namespace Project_DAW.Controllers
                 IdentityUserRole<string> delet = db.UserRoles.Where(r => r.UserId == Moderator.Id && r.RoleId == modrole.Id).First();
                 db.UserRoles.Remove(delet);
                 db.SaveChanges();
-                  }
-                else
+                TempData["message-alert"] = "alert alert-success";
+
+                TempData["Remove"] = "Moderator a fost eliminat cu succes";
+
+            }
+            else
                 {
-                TempData["Remove"] = "Nu s-a putut gasii userul";
+                TempData["message-alert"] = "alert alert-danger";
+
+                TempData["Remove"] = "Nu s-a putut gasii Moderator!";
                 }
 
-            TempData["Remove"] = "Moderator a fost eliminat cu succes";
             return RedirectToAction("Index");
         }
         public IActionResult Users()
@@ -163,7 +171,6 @@ namespace Project_DAW.Controllers
                 {
                     Imagine img = db.Imagini.Where(img => img.UserId == user.Id && img.Usage == "Profile").First();
                     var Sursa64 = Convert.ToBase64String(img.ImageData);
-                    TempData["Test"] = img.Type;
                     var sursa = $"data:{img.Type};base64,{Sursa64}";
                     ImagesSrc.Add(sursa);
 
@@ -199,6 +206,7 @@ namespace Project_DAW.Controllers
                     };
                     db.UserRoles.Add(addrole);
                     db.SaveChanges();
+                    TempData["message-alert"] = "alert alert-success";
                     TempData["AddRole"] = "Userului i s-a atribuit cu succes rolul!";
                     return RedirectToAction("Index");
                 }

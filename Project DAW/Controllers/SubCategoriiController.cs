@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Project_DAW.Data;
 using Project_DAW.Models;
 
@@ -48,6 +49,8 @@ namespace Project_DAW.Controllers
         public ActionResult New()
         {
             SubCategorie subCategorie = new SubCategorie();
+
+            
             subCategorie.Categ = GetAllCategories();
             return View(subCategorie);
         }

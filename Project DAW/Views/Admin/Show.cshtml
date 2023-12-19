@@ -1,8 +1,12 @@
 ﻿@model Project_DAW.Models.ApplicationUser
 
-@if (TempData.ContainsKey("Remove"))
+@if (TempData.ContainsKey("Remove") && TempData.ContainsKey("message-alert"))
 {
-    <p>@TempData["Remove"]</p>
+    <div class="alert @TempData["message-alert"] alert-dismissible fade show" role="alert">
+        @TempData["Remove"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
 }
 <img sizes="" class="rounded" alt="avatar1" src="@ViewBag.Src" style="width: 200px; height: 200px;" />
 <ul class="list-group list-group-flush">

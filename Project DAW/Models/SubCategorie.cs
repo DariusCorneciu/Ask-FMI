@@ -14,10 +14,8 @@ namespace Project_DAW.Models
         [Required(ErrorMessage = "Numele Categoriei este necesar")]
         public string Title { get; set; }
         public virtual Categorie? Categorie { get; set; }
-
+        public virtual ICollection<Intrebare> Intrebari { get; set; }
         [NotMapped]
-        public IEnumerable<SelectListItem>? Categ { get; set; }
-        public virtual ICollection<Intrebare>? Intrebari { get; set; }
-
+        public IEnumerable<SelectListItem> Categ { get; internal set; }
     }
 }

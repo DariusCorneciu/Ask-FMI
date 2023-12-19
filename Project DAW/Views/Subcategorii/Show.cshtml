@@ -24,6 +24,11 @@
     </form>
     <br />
 }
+@if (ViewBag.UserCurent != null)
+{
+    <a class="btn alert-success" href="/Intrebari/New?idsc=@Model.Id">Adaugare Intrebare</a>
+    <br />
+}
 
 
 

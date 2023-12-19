@@ -3,9 +3,13 @@
 @{
     int i = 0;
 }
-@if (TempData.ContainsKey("Test"))
+@if (TempData.ContainsKey("AddRole") && TempData.ContainsKey("message-alert"))
 {
-    <p>@TempData["Test"]</p>
+    <div class=" @TempData["message-alert"] alert-dismissible fade show" role="alert">
+        @TempData["AddRole"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
 }
 
 <div class="container">

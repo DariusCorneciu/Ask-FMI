@@ -4,10 +4,11 @@
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
-{
-        <li class="nav-item">
+    {
+        var user = await UserManager.GetUserAsync(User);
+
+        @*<li class="nav-item">
             @{
-                var user = await UserManager.GetUserAsync(User);
                 
                 if(user.Imagini == null){
                 }
@@ -22,7 +23,7 @@
 
                 }
             }
-           </li>
+    </li>*@
     <li class="nav-item">
 
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Buna,<strong> @user.FirstName @user.LastName </strong></a>

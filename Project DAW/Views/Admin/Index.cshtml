@@ -2,15 +2,37 @@
 @{
     int i = 0;
 }
+@if (TempData.ContainsKey("Remove") && TempData.ContainsKey("message-alert"))
+{
+    <div class="@TempData["message-alert"] alert-dismissible fade show" role="alert">
+        @TempData["Remove"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
+}
+@if (TempData.ContainsKey("AddRole") && TempData.ContainsKey("message-alert"))
+{
+    <div class="@TempData["message-alert"] alert-dismissible fade show" role="alert">
+        @TempData["AddRole"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
+}
+@if (TempData.ContainsKey("Reopen") && TempData.ContainsKey("message-alert"))
+{
+    <div class=" @TempData["message-alert"] alert-dismissible fade show" role="alert">
+        @TempData["Reopen"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+}
 <div class="container">
     <div class="row">
         <div class="col-md-2">
 
             <ul class="nav flex-column ">
                 <li class="nav-item">
-                <strong> Admin Pannel</strong>   
+                <strong> Admin Panel</strong>   
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/Categorii/Index">Categorii</a>
@@ -19,7 +41,7 @@
                     <a class="nav-link" href="/SubCategorii/Index">SubCategorii</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Useri(Soon)</a>
+                    <a class="nav-link" href="Admin/Users">Useri</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Reclamatii(Soon)</a>
