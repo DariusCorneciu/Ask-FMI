@@ -9,13 +9,12 @@
             method: FormMethod.Post))
             {
 
-                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
-
+              
                 @Html.Label("Name", "Titlu intrebare")
                 <br />
                 @Html.TextBox("Name", null, new { @class = "form-control" })
 
-                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                @Html.ValidationMessage("Name", null, new { @class = "text-danger" })
                 <br />
 
                 <br />
@@ -28,7 +27,7 @@
                 <br />
 
                 <br />
-                @if (Model.SubCategorieId == null)
+                @if (Model.SubCateg != null)
                 {
                     <label>Selectati categoria</label>
                     @Html.DropDownListFor(m => m.SubCategorieId, new SelectList(Model.SubCateg, "Value", "Text"),
@@ -36,6 +35,11 @@
 
                     @Html.ValidationMessageFor(m => m.SubCategorieId, null, new { @class = "text-danger" })
                     <br />
+                }
+                else
+                {
+                    @Html.Hidden("IsOpen",true)
+                    @Html.Hidden("SubCategorieId",Model.SubCategorieId)
                 }
                
                 <br />

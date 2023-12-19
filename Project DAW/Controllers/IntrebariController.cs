@@ -88,30 +88,34 @@ namespace Project_DAW.Controllers
             Intrebare intrebare = new Intrebare();
             if (idsc != null)
             {
-                intrebare.SubCategorieId = idsc;
+                intrebare.SubCategorieId = (int)idsc;
+               
             }
             else
             {
-                if (User.IsInRole("Licenta"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Licenta");
-                }
-                else if (User.IsInRole("Master"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Master");
-                }
-                else if (User.IsInRole("Admitere"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Admitere");
-                }
-                else if (User.IsInRole("Admin"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Admin");
-                }
-                else if (User.IsInRole("Moderator"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Admin");
-                }
+                
+                    if (User.IsInRole("Licenta"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Licenta");
+                    }
+                    else if (User.IsInRole("Master"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Master");
+                    }
+                    else if (User.IsInRole("Admitere"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Admitere");
+                    }
+                    else if (User.IsInRole("Admin"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Admin");
+                    }
+                    else if (User.IsInRole("Moderator"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Admin");
+                    }
+                
+                
             }
             return View(intrebare);
          }
@@ -120,11 +124,11 @@ namespace Project_DAW.Controllers
 
         public IActionResult New(Intrebare intrebare)
         {
-            intrebare.Date = DateTime.Now;
-            intrebare.UserId = _userManager.GetUserId(User);
-            intrebare.IsOpen = true;
             if(ModelState.IsValid)
             {
+                intrebare.Date = DateTime.Now;
+                intrebare.UserId = _userManager.GetUserId(User);
+                intrebare.IsOpen = true;
                 db.Intrebari.Add(intrebare);
                 db.SaveChanges();
                 TempData["message"] = "Intrebarea a fost adaugata!";
@@ -133,22 +137,31 @@ namespace Project_DAW.Controllers
             }
             else
             {
-                if(User.IsInRole("Licenta"))
+                if(intrebare.IsOpen == false)
                 {
-                    intrebare.SubCateg = GetAllCategories("Licenta");
+                    if (User.IsInRole("Licenta"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Licenta");
+                    }
+                    else if (User.IsInRole("Master"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Master");
+                    }
+                    else if (User.IsInRole("Admitere"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Admitere");
+                    }
+                    else if (User.IsInRole("Admin"))
+                    {
+                        intrebare.SubCateg = GetAllCategories("Admin");
+                    }
+
+
+
                 }
-                else if (User.IsInRole("Master"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Master");
-                }
-                else if (User.IsInRole("Admitere"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Admitere");
-                }
-                else if (User.IsInRole("Admin"))
-                {
-                    intrebare.SubCateg = GetAllCategories("Admin");
-                }
+
+
+
                 return View(intrebare);
             }
         }

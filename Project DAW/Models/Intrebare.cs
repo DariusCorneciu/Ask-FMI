@@ -10,11 +10,12 @@ namespace Project_DAW.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "Intrebarea trebuie sa aiba un nume!!!!")]
         public string Name { get; set; }
-        [Required(ErrorMessage = "Intrebarea trebuie sa fie adaugata!!!!")]
+        [Required(ErrorMessage = "Intrebarea trebuie sa fie continut!!!!")]
         public string Continut { get; set; }
         public DateTime Date { get; set; }
-        
-        public int? SubCategorieId { get; set; }
+
+        [Required(ErrorMessage = "O intrebare nu poate sa nu aiba o categorie")]
+        public int SubCategorieId { get; set; }
         public bool IsOpen { get; set; }
         public virtual SubCategorie? SubCategorie { get; set; }
 
