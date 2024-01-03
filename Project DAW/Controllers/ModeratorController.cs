@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using Project_DAW.Data;
 using Project_DAW.Models;
 
 namespace Project_DAW.Controllers
 {
-    [Authorize(Roles="Moderator,Admin")]
+    [Authorize(Roles ="User,Admin")]
     public class ModeratorController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -29,6 +30,20 @@ namespace Project_DAW.Controllers
 
         public IActionResult Index()
         {
+            ApplicationUser user = db.Users.Find(_userManager.GetUserId(User));
+
+            if (!user.Moderator)
+            {
+                if (User.IsInRole("Admin")) { } else
+                {
+                    TempData["Mod"] = "Ai fost scos din functia de moderator si nu mai poti accesa pagina!";
+
+                    return Redirect("/Home/Index");
+
+                }
+
+            }
+            
             var intrebari_fara_raspuns = db.Intrebari.Include("User").Where(a => a.IsOpen == true).ToList();
 
             ViewBag.intrebari_fara_raspuns = intrebari_fara_raspuns;
@@ -40,7 +55,13 @@ namespace Project_DAW.Controllers
             {
                 raspuns.Date = DateTime.Now;
                 raspuns.UserId = _userManager.GetUserId(User);
-               
+                ApplicationUser user = db.Users.Find(raspuns.UserId);
+                if (!user.Moderator)
+                {
+                    TempData["Mod"] = "Ai fost scos din functia de moderator si nu mai poti accesa pagina!";
+                    return Redirect("/Home/Index");
+
+                }
                 if (ModelState.IsValid)
                 {
                    

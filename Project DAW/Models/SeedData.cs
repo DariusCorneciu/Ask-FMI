@@ -24,17 +24,25 @@ namespace Project_DAW.Models
                     return;   // baza de date contine deja roluri
                 }
 
+                if (!context.Categorii.Any())
+                {
+                    context.Categorii.AddRange(
+                    new Categorie {  Name = "Admitere" },
+                    new Categorie {  Name = "Licenta" },
+                    new Categorie { Name = "Master" }
+                    );
+                    context.SaveChanges();
+
+                }
+
                 // CREAREA ROLURILOR IN BD
                 // daca nu contine roluri, acestea se vor crea
                 context.Roles.AddRange(
                     new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7210", Name = "Admin", NormalizedName = "Admin".ToUpper() },
-                    new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7211", Name = "Moderator", NormalizedName = "Moderator".ToUpper() },
-                    new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7212", Name = "User", NormalizedName = "User".ToUpper() },
-                     new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7213", Name = "Admitere", NormalizedName = "Admitere".ToUpper() },
-                     new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7214", Name = "Licenta", NormalizedName = "Licenta".ToUpper() },
-                     new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7215", Name = "Master", NormalizedName = "Master".ToUpper() }
-
+                    new IdentityRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7212", Name = "User", NormalizedName = "User".ToUpper() }
+                   
                 );
+
 
                 // o noua instanta pe care o vom utiliza pentru crearea parolelor utilizatorilor
                 // parolele sunt de tip hash
@@ -63,6 +71,7 @@ namespace Project_DAW.Models
                         EmailConfirmed = true,
                         FirstName = "Moderator",
                         LastName = "Test",
+                        Moderator = true,
                         JoinDate = DateTime.Now,
                         NormalizedEmail = "MOD@TEST.COM",
                         Email = "mod@test.com",
@@ -89,6 +98,7 @@ namespace Project_DAW.Models
                         EmailConfirmed = true,
                         NormalizedEmail = "USERA@TEST.COM",
                         FirstName = "Admitere",
+                        Admitere = true,
                         LastName = "Test",
                         JoinDate = DateTime.Now,
                         Email = "usera@test.com",
@@ -102,12 +112,13 @@ namespace Project_DAW.Models
                         EmailConfirmed = true,
                         NormalizedEmail = "USERL@TEST.COM",
                         FirstName = "Licenta",
+                        Licenta = true,
                         LastName = "Test",
                         JoinDate = DateTime.Now,
                         Email = "userl@test.com",
                         NormalizedUserName = "USERL@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User3!")
-                    }, 
+                    },
                     new ApplicationUser
                     {
                         Id = "8e445865-a24d-4543-a6c6-9443d048cdb5", // primary key
@@ -115,49 +126,47 @@ namespace Project_DAW.Models
                         EmailConfirmed = true,
                         NormalizedEmail = "USERM@TEST.COM",
                         FirstName = "Master",
+                        Master = true,
                         LastName = "Test",
                         JoinDate = DateTime.Now,
                         Email = "userm@test.com",
                         NormalizedUserName = "USERM@TEST.COM",
                         PasswordHash = hasher.HashPassword(null, "User4!")
                     }
-                );
-
-                // ASOCIEREA USER-ROLE
+                ); ;
                 context.UserRoles.AddRange(
-                    new IdentityUserRole<string>
-                    {
-                        RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb0"
-                    },
-                    new IdentityUserRole<string>
-                    {
-                        RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7211",
-                        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb1"
-                    },
+                   new IdentityUserRole<string>
+                   {
+                       RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7210",
+                       UserId = "8e445865-a24d-4543-a6c6-9443d048cdb0"
+                   },
+                   new IdentityUserRole<string>
+                   {
+                       RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
+                       UserId = "8e445865-a24d-4543-a6c6-9443d048cdb1"
+                   },
+                   new IdentityUserRole<string>
+                   {
+                       RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
+                       UserId = "8e445865-a24d-4543-a6c6-9443d048cdb2"
+                   },
                     new IdentityUserRole<string>
                     {
                         RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
-                        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb2"
+                        UserId = "8e445865-a24d-4543-a6c6-9443d048cdb3"
                     },
                      new IdentityUserRole<string>
                      {
-                         RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7213",
-                         UserId = "8e445865-a24d-4543-a6c6-9443d048cdb3"
+                         RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
+                         UserId = "8e445865-a24d-4543-a6c6-9443d048cdb4"
                      },
                       new IdentityUserRole<string>
                       {
-                          RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7214",
-                          UserId = "8e445865-a24d-4543-a6c6-9443d048cdb4"
-                      },
-                       new IdentityUserRole<string>
-                       {
-                           RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7215",
-                           UserId = "8e445865-a24d-4543-a6c6-9443d048cdb5"
-                       }
-                );
-                context.SaveChanges();
-
+                          RoleId = "2c5e174e-3b0e-446f-86af-483d56fd7212",
+                          UserId = "8e445865-a24d-4543-a6c6-9443d048cdb5"
+                      }
+               );
+                context.SaveChanges();              
             }
         
         }

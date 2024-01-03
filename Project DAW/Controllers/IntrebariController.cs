@@ -8,6 +8,7 @@ using Project_DAW.Models;
 
 namespace Project_DAW.Controllers
 {
+    
     public class IntrebariController : Controller
     {
 
@@ -53,6 +54,9 @@ namespace Project_DAW.Controllers
                                 .Where(q => q.Id == id)
                                 .First();
             ViewBag.Intoarcere = TempData["Source"];
+
+            ApplicationUser currentuser = db.Users.Find(_userManager.GetUserId(User));
+            ViewBag.current = currentuser;
             GetRole();
             return View(intrebare);
         }
@@ -75,6 +79,9 @@ namespace Project_DAW.Controllers
             }
             else
             {
+                ApplicationUser currentuser = db.Users.Find(_userManager.GetUserId(User));
+                ViewBag.current = currentuser;
+
                 TempData["Test"] = "Nu este valid" + comentariu.Date + comentariu.IntrebareId + " " + comentariu.Id; 
                 Intrebare intrebare = db.Intrebari.Include("User").Include("Comentarii.User").Include("Comentarii").Include("Raspuns").Where(a => a.Id == comentariu.IntrebareId).First();
                 GetRole();
@@ -238,8 +245,7 @@ namespace Project_DAW.Controllers
             }
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Moderator,Admitere,Licenta,Master,Admin")]
+        [Authorize(Roles = "User,Admin")]
         public ActionResult Delete(int id)
         {
 
@@ -280,10 +286,17 @@ namespace Project_DAW.Controllers
 
         private void GetRole()
         {
+            if (User.IsInRole("User"))
+            {
+                ViewBag.EsteMod = db.Users.Find(_userManager.GetUserId(User)).Moderator;
 
-            ViewBag.EsteMod = User.IsInRole("Moderator");
+            }
+            else
+            {
+                ViewBag.EsteMod = false;
+            }
             ViewBag.EsteAdmin = User.IsInRole("Admin");
-            ViewBag.EsteUser = User.IsInRole("User") || User.IsInRole("Admitere") || User.IsInRole("Admin") || User.IsInRole("Moderator") || User.IsInRole("Master") || User.IsInRole("Licenta");
+            ViewBag.EsteUser = User.IsInRole("User");
 
             ViewBag.UserCurent = _userManager.GetUserId(User);
         }

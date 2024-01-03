@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -6,7 +12,12 @@
     <title>@ViewData["Title"] - Project_DAW</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/profile.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/Project_DAW.styles.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css?family=Asap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+
 
 </head>
 <body>
@@ -23,29 +34,37 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Categorii" asp-action="Index">Afisare Categorii</a>
                         </li>
-                        @if (User.IsInRole("User") || User.IsInRole("Admitere") || User.IsInRole("Licenta") || User.IsInRole("Master"))
+                        @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="Index">Afisare Intrebari</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="New">Adauga Intrebare</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Moderator") || User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Moderator" asp-action="Index">Mod Panel</a>
-                            </li>
-                        }
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
-                            </li>
+                            var user = await UserManager.GetUserAsync(User);
+                            @if (User.IsInRole("User"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="Index">Afisare Intrebari</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Intrebari" asp-action="New">Adauga Intrebare</a>
+                                </li>
+                            }
+                            @if (user.Moderator || User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Moderator" asp-action="Index">Mod Panel</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Admin Panel</a>
+                                </li>
 
 
+                            }
                         }
+                        
+        
+
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

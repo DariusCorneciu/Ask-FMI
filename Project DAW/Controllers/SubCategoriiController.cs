@@ -66,6 +66,8 @@ namespace Project_DAW.Controllers
             }
             else
             {
+                subcategorie.Categ = GetAllCategories();
+
                 return View(subcategorie);
             }
         }

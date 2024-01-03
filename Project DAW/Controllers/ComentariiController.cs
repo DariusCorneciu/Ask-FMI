@@ -26,11 +26,12 @@ namespace Project_DAW.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-        [Authorize(Roles ="User,Admin,Moderator")]
+        [Authorize(Roles ="User,Admin")]
         public IActionResult Delete(int id)
         {
             Comentariu comentariu = db.Comentarii.Find(id);
-            if(comentariu.UserId == _userManager.GetUserId(User) || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+            ApplicationUser user = db.Users.Find(_userManager.GetUserId(User));
+            if(comentariu.UserId == user.Id || User.IsInRole("Admin") ||user.Moderator )
             {
                 db.Comentarii.Remove(comentariu);
                 db.SaveChanges();

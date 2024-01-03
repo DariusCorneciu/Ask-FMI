@@ -13,7 +13,10 @@
     @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
     <br />
     <br />
+    @Html.TextBox("Description", null, new { @class = "form-control" })
 
+    @Html.ValidationMessageFor(m => m.Description, null, new { @class = "text-danger" })
+<br />
     <label>Selectati Categoria</label>
     @Html.DropDownListFor(m => m.CategorieId, new SelectList(Model.Categ, "Value", "Text"), "Selectati categoria", new {@class = "form-control"})
     @Html.ValidationMessageFor(m => m.CategorieId, null, new { @class = "text-danger" })

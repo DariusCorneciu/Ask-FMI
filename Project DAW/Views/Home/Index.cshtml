@@ -1,8 +1,25 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@if (TempData.ContainsKey("Mod"))
+{
+    <div class=" alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Mod"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class=" text-center col-md-6">
+            <h1 class="display-4 headline">Întrebări? Află Totul Despre</h1>
+                <h1 class="display-4 headline"> Facultatea de Matematica si Informatia Aici!</h1>
+  </div>
+        <div class="col-md-4">
+            <img src="/images/facultate-mate-info.png" alt="poza facultate" class="rounded-circle">
+      </div>
+
+  </div>
+   

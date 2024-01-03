@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Project_DAW.Data;
 using Project_DAW.Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,23 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
+
+/// pentru a verifica daca userul are valorile true pe coloanelele Moderator,Admitere,Licenta,Master
+/// 
+
+builder.Services.AddAuthorization(optiuni =>
+{
+    optiuni.AddPolicy("Moderator", policy =>
+    {
+        policy.RequireAssertion(context =>
+        {
+            var userid = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            return true;
+        });
+    });
+}
+    );
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -43,6 +61,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

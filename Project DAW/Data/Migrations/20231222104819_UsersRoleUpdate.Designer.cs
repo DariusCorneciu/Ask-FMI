@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Project_DAW.Data;
 
@@ -11,9 +12,10 @@ using Project_DAW.Data;
 namespace Project_DAW.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222104819_UsersRoleUpdate")]
+    partial class UsersRoleUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,11 +172,8 @@ namespace Project_DAW.Data.Migrations
                     b.Property<bool>("Admitere")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("BackroundPicture")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("BackroundType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("BackroundPicture")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("BanTime")
                         .HasColumnType("datetime2");
@@ -231,11 +230,8 @@ namespace Project_DAW.Data.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ProfileType")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("ProfilePicture")
+                        .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -305,6 +301,43 @@ namespace Project_DAW.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comentarii");
+                });
+
+            modelBuilder.Entity("Project_DAW.Models.Imagine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Usage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Imagini");
                 });
 
             modelBuilder.Entity("Project_DAW.Models.Intrebare", b =>
@@ -384,10 +417,6 @@ namespace Project_DAW.Data.Migrations
                     b.Property<int>("CategorieId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -465,6 +494,15 @@ namespace Project_DAW.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Project_DAW.Models.Imagine", b =>
+                {
+                    b.HasOne("Project_DAW.Models.ApplicationUser", "User")
+                        .WithMany("Imagini")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Project_DAW.Models.Intrebare", b =>
                 {
                     b.HasOne("Project_DAW.Models.SubCategorie", "SubCategorie")
@@ -507,6 +545,8 @@ namespace Project_DAW.Data.Migrations
             modelBuilder.Entity("Project_DAW.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Comentarii");
+
+                    b.Navigation("Imagini");
 
                     b.Navigation("Intrebari");
                 });

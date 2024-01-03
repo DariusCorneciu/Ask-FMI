@@ -5,7 +5,11 @@
 }
 @if (TempData.ContainsKey("Exista"))
 {
-    <p>@TempData["Exista"]</p>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Exista"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
 }
 
 <div class="container">

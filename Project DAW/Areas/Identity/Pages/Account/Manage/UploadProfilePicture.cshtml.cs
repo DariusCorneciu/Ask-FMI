@@ -17,16 +17,14 @@ namespace Project_DAW.Areas.Identity.Pages.Account.Manage
 {
     public class UploadProfilePictureModel : PageModel
     {
-        private readonly ApplicationDbContext db;
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public UploadProfilePictureModel(ApplicationDbContext context,
+        public UploadProfilePictureModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager
-            )
+            SignInManager<ApplicationUser> signInManager)
         {
-            db = context;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -61,9 +59,12 @@ namespace Project_DAW.Areas.Identity.Pages.Account.Manage
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required(ErrorMessage ="Nu poti da submit la nimic!")]
             [Display(Name ="Poza de profil")]
             public IFormFile Imagine { get; set; }
+
+            [Display(Name = "Backround")]
+            public IFormFile Backround { get; set; }
+
 
         }
 
@@ -99,62 +100,92 @@ namespace Project_DAW.Areas.Identity.Pages.Account.Manage
             }
             
 
-            if (!ModelState.IsValid)
+            if (Input.Imagine == null && Input.Backround == null)
             {
                 await LoadAsync(user);
+                StatusMessage = "Error :Nu ai schimbat nici poza de profil nici cea de fundal";
                 return Page();
             }
-            Imagine img = new Imagine();
+            if(Input.Imagine != null)
+            {
+                if (user.ProfilePicture != null)
+                {
+                    StatusMessage = "Ti-am sters automat poza vechie de profil si am inlocuito cu cea noua";
 
-           if(user.ProfilePicture)
-            {
-                var old = db.Imagini.Where(imga => imga.UserId == user.Id).Where(imga => imga.Usage == "Profile");
-                StatusMessage = "Ti-am sters automat poza vechie de profil si am inlocuito cu cea noua";
-                user.ProfilePicture = false;
-                foreach(Imagine oldimg in old)
-                {
-                    user.Imagini.Remove(oldimg);
                 }
-                
-            }
-            else
-            {
-                StatusMessage = "Ti-am adaugat noua poza de profil <3";
-            }
-            try
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
+                else
                 {
-                    await Input.Imagine.CopyToAsync(memoryStream);
-                    img.ImageData = memoryStream.ToArray();
+                    StatusMessage = "Ti-am adaugat noua poza de profil <3";
                 }
+                try
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        await Input.Imagine.CopyToAsync(memoryStream);
+                        user.ProfilePicture = memoryStream.ToArray();
+                    }
 
-                img.Name = Input.Imagine.FileName;
-                if(((float)Input.Imagine.Length)/1000 > 250)
+
+                    if (((float)Input.Imagine.Length) / 1000 > 250)
+                    {
+                        StatusMessage = "Error : Dimensiunile fisierului sunt prea mari!";
+                        return Page();
+
+                    }
+                    user.ProfileType = Input.Imagine.ContentType;
+
+                }
+                catch (Exception ex)
                 {
-                    StatusMessage = "Error : Dimensiunile fisierului sunt prea mari!";
+                    ModelState.AddModelError(string.Empty, $"Error uploading image: {ex.Message}");
                     return Page();
+                }
+
+
+
+            }
+            if (Input.Backround != null)
+            {
+                if (user.BackroundPicture != null)
+                {
+                    StatusMessage = "Ti-am sters automat poza vechie de fundal si am inlocuito cu cea noua";
 
                 }
-                img.Type = Input.Imagine.ContentType;
-                img.UserId = user.Id;
-                img.Usage = "Profile";
-                img.Size = Input.Imagine.Length;
-                user.ProfilePicture = true;
-                db.Imagini.Add(img);
-                db.SaveChanges();
+                else
+                {
+                    StatusMessage = "Ti-am adaugat noua poza de fundal <3";
+                }
+                try
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
+                    {
+                        await Input.Backround.CopyToAsync(memoryStream);
+                        user.BackroundPicture = memoryStream.ToArray();
+                    }
+
+
+                    if (((float)Input.Backround.Length) / 1000 > 250)
+                    {
+                        StatusMessage = "Error : Dimensiunile fisierului sunt prea mari!";
+                        return Page();
+
+                    }
+                    user.BackroundType = Input.Backround.ContentType;
+
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Error uploading image: {ex.Message}");
+                    return Page();
+                }
+
+
 
             }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, $"Error uploading image: {ex.Message}");
-                return Page();
-            }
-
-            
 
 
 
+            await _userManager.UpdateAsync(user);
             await _signInManager.RefreshSignInAsync(user);
             return RedirectToPage();
         }

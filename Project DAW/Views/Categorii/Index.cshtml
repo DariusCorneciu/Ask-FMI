@@ -12,18 +12,55 @@
 }
 <br />
 
-@foreach (var categorie in ViewBag.Categorii)
+@foreach (Project_DAW.Models.Categorie categorie in ViewBag.Categorii)
 {
-    @Html.Label("Name", "Nume categorie")
-    <p>@categorie.Name</p>
-    <a class="btn alert-success" href="/Categorii/Show/@categorie.Id">Afisare categorie</a>
-    if (ViewBag.EsteAdmin == true)
-    {
-        <a class="btn alert-success" href="/Categorii/Edit/@categorie.Id">Editare categorie</a>
-        <br />
-    }
 
-    <hr />
-    <br />
+<div class="container-categ">
+    <div class="subforum">
+        <div class="subforum-title">
+            <h1>@categorie.Name</h1>
+        </div>
+            @foreach(Project_DAW.Models.SubCategorie subcateg in categorie.SubCategorii)
+            {
+                <div class="subforum-row">
+                    <div class="subforum-icon subforum-column center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat-right-dots center" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z" />
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
+
+                    </div>
+                    <div class="subforum-description subforum-column">
+                        <a class="btn title-size text-decoration-underline" href="/SubCategorii/Show/@subcateg.Id">@subcateg.Title</a>
+                        <p>@subcateg.Description</p>
+                    </div>
+                    <div class="subforum-stats subforum-column center">
+                        <span>@subcateg.Intrebari.Count() Intrebari</span>
+                    </div>
+                        @if(subcateg.Intrebari.Count() > 0)
+                        {
+                        <div class="subforum-info subforum-column text-center">
+
+                            <b><a href="/Intrebari/Show/@subcateg.Intrebari.Last().Id">Ultima Intrebare</a></b> scrisa de <a href="/Users/Show/@subcateg.Intrebari.Last().User.Id">@subcateg.Intrebari.Last().User.FirstName @subcateg.Intrebari.Last().User.LastName </a>
+                            <br> in <small>@subcateg.Intrebari.Last().Date.ToString("dd MMM")</small>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="subforum-info subforum-column">
+
+                            <b><a href="/Intrebari/New?idsc=@subcateg.Id">Pune prima Intrebare</a></b>
+
+                        </div>
+                        
+                    }
+
+                </div>
+                
+            }
+            
+    </div>
+
+</div>
 }
-<br />

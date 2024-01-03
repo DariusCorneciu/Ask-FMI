@@ -32,7 +32,7 @@ namespace Project_DAW.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            var categorii = from category in db.Categorii
+            var categorii = from category in db.Categorii.Include(u=>u.SubCategorii).ThenInclude(u=>u.Intrebari).ThenInclude(u=>u.User)
                             orderby category.Name
                             select category;
             ViewBag.Categorii = categorii;
