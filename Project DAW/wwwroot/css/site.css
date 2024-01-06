@@ -66,6 +66,28 @@ img {
     border-top: 1px solid #e6ecf0;
 }
 
+#poza_register 
+{
+    background-image: url('/images/image_login.png');
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:cover;
+}
+
+/*
+    Culoare buton succes
+*/
+.btn.btn-success {
+    background-color: blue;
+    border-color: blue;
+}
+
+.btn.btn-success:hover {
+    background-color: darkblue;
+    border-color: darkblue;
+    color: white;
+}
+
 
 .tweet-header {
     display: flex;
@@ -176,15 +198,63 @@ img {
     color:#1463f3;
 }
 
+/*
+    Subcategorii
+*/
+.container-subcateg {
+    color: #1d2023;
+    margin: 20px;
+    padding: 0px;
+}
+.subforum {
+    margin-top: 20px;
+}
 
+.subcategD-title {
+    background-color: #84A4FC;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 4px;
+}
+
+.subcategD-row {
+    display: grid;
+    grid-template-columns: 7% 60% 13% 20%;
+}
+
+.subcategD-column {
+    padding: 10px;
+    margin: 4px;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.subcategD-description * {
+    margin-block: 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subcategD-icon i {
+    font-size: 45px;
+}
+
+.subcategD-devider {
+    display: none;
+}
 /*
     Categoriii
 */
 .container-categ {
-    color:#1d2023;
+    color: #1d2023;
     margin: 20px;
     padding: 0px;
 }
+
 
 .subforum {
     margin-top: 20px;
@@ -231,6 +301,9 @@ img {
     display: none;
 }
 
+.navbar {
+    background-color: #84A4FC !important;
+}
 
 /* For the smartphones */
 @media screen and (max-width: 460px) {
@@ -251,6 +324,9 @@ img {
         height: 1px;
         background-image: linear-gradient(to right, rgba(190, 190, 190, 0), rgba(255, 255, 255, 0.75), rgba(190, 190, 190, 0));
     }
+}
+a {
+    justify-content: center;
 }
 
 /* For the tablets */

@@ -1,38 +1,56 @@
 ﻿@model Project_DAW.Models.SubCategorie
-
-
-<h2>@ViewBag.Title</h2>
-
+@if (ViewBag.EsteAdmin == true)
+{
+    <div class="align-items-center justify-content-center d-flex">
+        <a class="btn btn-success" href="/SubCategorii/New">Adauga o noua SubCategorie</a>
+    </div>
+}
 <br />
 
-<p>@Model.Title</p>
+    <div class="container-subcateg">
+        <div class="subcategD">
+            <div class="subcategD-title">
+                <h1>@Model.Title</h1>
+            </div>
+        @foreach (Project_DAW.Models.Intrebare intrebare in Model.Intrebari)
+            {
+                <div class="subcategD-row">
+                    <div class="subcategD-icon subcategD-column center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat-right-dots center" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z" />
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
 
-<p> @Model.Categorie.Name </p>
+                    </div>
+                    <div class="subcategD-description subcategD-column">
+                        <a class="btn title-size text-decoration-underline" href="/Intrebari/Show/@intrebare.Id">@intrebare.Name</a>
+                        <p >@intrebare.Continut</p>
+                    </div>
+                    <div class="subcategD-stats subcategD-column center">
+                        <span>@intrebare.Comentarii.Count() Comenatarii</span>
+                    </div>
+                    @if (intrebare.Comentarii.Count() > 0)
+                    {
+                        <div class="subcategD-info subcategD-column text-center">
+                            <b><a href="/Intrebari/Show/@intrebare.Comentarii.Last().Id">Ultimul comentariu</a></b> scris de <a href="/Users/Show/@intrebare.Comentarii.Last().User.Id">@intrebare.Comentarii.Last().User.FirstName @intrebare.Comentarii.Last().User.LastName </a>
+                            <br> in <small>@intrebare.Comentarii.Last().Date.ToString("dd MMM")</small>
 
-@foreach(var intrebare in Model.Intrebari)
-{
-    <p> @intrebare.Name</p>
-    <a class="btn alert-success" href="/Intrebari/Show/@intrebare.Id">Afisare intrebare</a>
-}
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="subcategD-info subcategD-column">
 
-@if(ViewBag.EsteAdmin == true)
-{
-    <form method="post" action="/SubCategorii/Delete/@Model.Id">
+                            <b><a href="/Comentarii/New">Fii tu primul care ofera un raspuns</a></b>
 
-        <button class="btn btn-danger" type="submit">Sterge SubCategoria</button>
-        
-    </form>
-    <br />
-}
-@if (ViewBag.UserCurent != null)
-{
-    <a class="btn alert-success" href="/Intrebari/New?idsc=@Model.Id">Adaugare Intrebare</a>
-    <br />
-}
+                        </div>
 
+                    }
 
+                </div>
 
-<br />
-<hr />
-<br />
+            }
 
+        </div>
+
+    </div>

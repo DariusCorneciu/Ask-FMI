@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Project_DAW.Data;
 using Project_DAW.Models;
 
@@ -40,7 +39,7 @@ namespace Project_DAW.Controllers
         }
         public ActionResult Show(int id)
         {
-            SubCategorie subcategorie = db.SubCategorii.Include("Categorie").Include("Intrebari").Where(sc => sc.Id == id).First();
+            SubCategorie subcategorie = db.SubCategorii.Include(u => u.Intrebari).ThenInclude(u => u.Comentarii).ThenInclude(u => u.User).Where(sc => sc.Id == id).First();
             TempData["Source"] = "SubCategorii";
             TempData["IdSC"] = subcategorie.Id;
             SetAccessRights();
