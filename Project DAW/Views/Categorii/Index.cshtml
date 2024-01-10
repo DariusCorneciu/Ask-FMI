@@ -20,7 +20,10 @@
         <div class="subforum-title">
             <h1>@categorie.Name</h1>
         </div>
-            @foreach(Project_DAW.Models.SubCategorie subcateg in categorie.SubCategorii)
+        @{
+            var subcategorii_sortate = categorie.SubCategorii.OrderBy(s => s.Intrebari.Count).Take(5);
+        }
+            @foreach(Project_DAW.Models.SubCategorie subcateg in subcategorii_sortate)
             {
                 <div class="subforum-row">
                     <div class="subforum-icon subforum-column center">
@@ -57,7 +60,16 @@
                     }
 
                 </div>
-                
+                @if (categorie.SubCategorii.Count() > 5)
+                {
+                    <a href="/Categorii/Show/@categorie.Id" class="btn btn-primary">Afișează toate subcategoriile din aceasta categorie</a>
+                }
+                @if(ViewBag.EsteAdmin == true)
+                {
+                    <div class="align-items-center justify-content-center d-flex">
+                        <a class="btn btn-danger" href="/Categorii/Delete/@categorie.Id">Sterge aceasta categorie</a>
+                    </div>
+                }
             }
             
     </div>

@@ -31,7 +31,7 @@ namespace Project_DAW.Controllers
             {
                 ViewBag.message = TempData["message"].ToString();
             }
-            var subcategorii = from subcategorie in db.SubCategorii
+            var subcategorii = from subcategorie in db.SubCategorii.Include(sc => sc.Intrebari).ThenInclude(i => i.Comentarii).ThenInclude(u => u.User)
                                 orderby subcategorie.Title
                                 select subcategorie;
             ViewBag.Subcategorii = subcategorii;
@@ -39,7 +39,19 @@ namespace Project_DAW.Controllers
         }
         public ActionResult Show(int id)
         {
-            SubCategorie subcategorie = db.SubCategorii.Include(u => u.Intrebari).ThenInclude(u => u.Comentarii).ThenInclude(u => u.User).Where(sc => sc.Id == id).First();
+            SubCategorie subcategorie = db.SubCategorii.Find(id);
+            var questions = db.Intrebari.Include(i => i.Comentarii).Include(u => u.User).Where(i => i.SubCategorieId == subcategorie.Id);
+            int _perPage = 5;
+            int totalQuestions = 0;
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+            var offset = 0;
+            if(!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+            var paginatedQuestions = questions.Skip(offset).Take(_perPage);
+            ViewBag.lastPage = Math.Ceiling((float)totalQuestions / (float)_perPage);
+            ViewBag.Questions = paginatedQuestions;
             TempData["Source"] = "SubCategorii";
             TempData["IdSC"] = subcategorie.Id;
             SetAccessRights();

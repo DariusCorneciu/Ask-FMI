@@ -30,9 +30,6 @@ namespace Project_DAW.Controllers
         }
         public IActionResult Index()
         {
-            var intrebari = db.Intrebari.Include("Raspuns");
-
-            ViewBag.intrebari = intrebari;
             TempData["Source"] = "Intrebari";
 
             if (TempData.ContainsKey("message"))
@@ -40,6 +37,19 @@ namespace Project_DAW.Controllers
                 ViewBag.Message = TempData["message"];
                 ViewBag.Alert = TempData["messageType"];
             }
+            var questions = db.Intrebari.Include(i => i.Comentarii).Include(u => u.User).OrderBy(i => i.Name);
+            int _perPage = 5;
+            int totalQuestions = 0;
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+            var offset = 0;
+            if (!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+            var paginatedQuestions = questions.Skip(offset).Take(_perPage);
+            ViewBag.lastPage = Math.Ceiling((float)totalQuestions / (float)_perPage);
+            ViewBag.Questions = paginatedQuestions;
+            SetAccessRights();
             return View();
         }
         public IActionResult Show(int id)

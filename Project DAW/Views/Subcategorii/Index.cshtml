@@ -1,6 +1,4 @@
-﻿@model Project_DAW.Models.SubCategorie
-
-@if (TempData.ContainsKey("message"))
+﻿@if (TempData.ContainsKey("message"))
 {
     <h1>@ViewBag.message</h1>
 }
@@ -9,22 +7,70 @@
 @if (ViewBag.EsteAdmin == true)
 {
     <div class="align-items-center justify-content-center d-flex">
-        <a class="btn btn-success" href="/SubCategorii/New">Adauga o noua subcategorie</a>
+        <a class="btn btn-success" href="/Categorii/New">Adauga o noua categorie</a>
     </div>
 }
 <br />
 
-@foreach (Project_DAW.Models.SubCategorie categorie in ViewBag.Subcategorii)
+@foreach (Project_DAW.Models.SubCategorie subCategorie in ViewBag.Subcategorii)
 {
-    @Html.Label("Name", "Nume categorie")
-    <p>@categorie.Title</p>
-    <a class="btn alert-success" href="/SubCategorii/Show/@categorie.Id">Afisare SubCategorie</a>
-    @if(ViewBag.EsteAdmin == true)
-    {
-        <a class="btn alert-success" href="/SubCategorii/Edit/@categorie.Id">Editare SubCategorie</a>
-        <br />
-    }
-    <hr />
-    <br />
+
+    <div class="container-categ">
+        <div class="subforum">
+            <div class="subforum-title">
+                <h1>@subCategorie.Title</h1>
+            </div>
+            @foreach (Project_DAW.Models.Intrebare intrebare in subCategorie.Intrebari)
+            {
+                <div class="subforum-row">
+                    <div class="subforum-icon subforum-column center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-chat-right-dots center" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h9.586a2 2 0 0 1 1.414.586l2 2V2a1 1 0 0 0-1-1zm12-1a2 2 0 0 1 2 2v12.793a.5.5 0 0 1-.854.353l-2.853-2.853a1 1 0 0 0-.707-.293H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2z" />
+                            <path d="M5 6a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+                        </svg>
+
+                    </div>
+                    <div class="subforum-description subforum-column">
+                        <a class="btn title-size text-decoration-underline" href="/Intrebarii/Show/@intrebare.Id">@intrebare.Name</a>
+                        <p>@intrebare.Continut</p>
+                    </div>
+                    <div class="subforum-stats subforum-column center">
+                        <span>@intrebare.Comentarii.Count() Intrebari</span>
+                    </div>
+                    @if (intrebare.Comentarii.Count() > 0)
+                    {
+                        <div class="subforum-info subforum-column text-center">
+
+                            <b><a href="/Intrebari/Show/@subCategorie.Intrebari.Last().Id">Ultima Intrebare</a></b> scrisa de <a href="/Users/Show/@subCategorie.Intrebari.Last().User.Id">@subCategorie.Intrebari.Last().User.FirstName @subCategorie.Intrebari.Last().User.LastName </a>
+                            <br> in <small>@subCategorie.Intrebari.Last().Date.ToString("dd MMM")</small>
+
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="subforum-info subforum-column">
+
+                            <b><a href="/Intrebari/New?idsc=@@subCategorie.Id">Pune prima Intrebare</a></b>
+
+                        </div>
+
+                    }
+     
+                </div>
+                @if (subCategorie.Intrebari.Count() > 5)
+                {
+                    <a href="/SubCategorii/Show/@subCategorie.Id" class="btn btn-primary">Afișează toate intrebarile din aceasta subcategorie</a>
+                }
+
+            }
+            @if (ViewBag.EsteAdmin == true)
+            {
+                <div class="align-items-center justify-content-center d-flex">
+                    <a class="btn btn-danger" href="/SubCategorii/Delete/@subCategorie.Id">Sterge aceasta subcategorie</a>
+                </div>
+            }
+
+        </div>
+
+    </div>
 }
-<br />

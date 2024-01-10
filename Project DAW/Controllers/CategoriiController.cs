@@ -41,8 +41,19 @@ namespace Project_DAW.Controllers
         }
         public ActionResult Show(int id)
         {
-            Categorie category = db.Categorii.Include("SubCategorii").Where(s => s.Id == id).First();
-            ViewBag.Categorii = category;
+            Categorie category = db.Categorii.Find(id);
+            var subcategorii = db.SubCategorii.Include(u => u.Intrebari).ThenInclude(u => u.User).Where(sc => sc.CategorieId == category.Id);
+            int _perPage = 5;
+            int totalSC = 0;
+            var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
+            var offset = 0;
+            if(!currentPage.Equals(0))
+            {
+                offset = (currentPage - 1) * _perPage;
+            }
+            var paginatedSC = subcategorii.Skip(offset).Take(_perPage);
+            ViewBag.lastPage = Math.Ceiling((float)totalSC / (float)_perPage);
+            ViewBag.SubCategorii = paginatedSC;
             SetAccessRights();
             return View(category);
         }
@@ -114,7 +125,7 @@ namespace Project_DAW.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            Categorie categorie = db.Categorii.Find(id);
+            Categorie categorie = db.Categorii.Include(c => c.SubCategorii).Where(c => c.Id == id).First();
             db.Categorii.Remove(categorie);
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();

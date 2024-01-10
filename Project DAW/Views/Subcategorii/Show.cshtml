@@ -12,7 +12,7 @@
             <div class="subcategD-title">
                 <h1>@Model.Title</h1>
             </div>
-        @foreach (Project_DAW.Models.Intrebare intrebare in Model.Intrebari)
+        @foreach (Project_DAW.Models.Intrebare intrebare in ViewBag.Questions)
             {
                 <div class="subcategD-row">
                     <div class="subcategD-icon subcategD-column center">
@@ -35,21 +35,48 @@
                             <b><a href="/Intrebari/Show/@intrebare.Comentarii.Last().Id">Ultimul comentariu</a></b> scris de <a href="/Users/Show/@intrebare.Comentarii.Last().User.Id">@intrebare.Comentarii.Last().User.FirstName @intrebare.Comentarii.Last().User.LastName </a>
                             <br> in <small>@intrebare.Comentarii.Last().Date.ToString("dd MMM")</small>
 
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="subcategD-info subcategD-column">
-
+                    </div>
+                }
+                else
+                {
+                    <div class="subcategD-info subcategD-column">
+                        @if (User.IsInRole("User"))
+                        {
                             <b><a href="/Comentarii/New">Fii tu primul care ofera un raspuns</a></b>
-
-                        </div>
+                        }
+                        else
+                        {
+                            <b><a href="/Identity/Account/Login">Fii tu primul care ofera un raspuns</a></b>
+                        }
+                    </div>
 
                     }
 
                 </div>
 
             }
+        <div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="/SubCategorii/Show/@Model.Id?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    @for (int i = 1; i <= ViewBag.lastPage; i++)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="/SubCategorii/Show/@Model.Id?page=@i">@(i)</a>
+                        </li>
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="/SubCategorii/Show/@Model.Id?page=@ViewBag.lastPage" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
 
         </div>
 
