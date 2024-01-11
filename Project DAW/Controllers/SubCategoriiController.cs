@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -60,16 +62,17 @@ namespace Project_DAW.Controllers
         public ActionResult New()
         {
             SubCategorie subCategorie = new SubCategorie();
-
-            
             subCategorie.Categ = GetAllCategories();
             return View(subCategorie);
         }
         [HttpPost]
         public ActionResult New(SubCategorie subcategorie)
         {
+            var sanitizer = new HtmlSanitizer();
             if (ModelState.IsValid)
             {
+                subcategorie.Description = sanitizer.Sanitize(subcategorie.Description);
+                subcategorie.Description = (subcategorie.Description);
                 db.SubCategorii.Add(subcategorie);
                 db.SaveChanges();
                 TempData["message"] = "Subcategoria a fost adaugata!";
@@ -83,25 +86,31 @@ namespace Project_DAW.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int id)
         {
             SubCategorie sb = db.SubCategorii.Include("Categorie").Include("Intrebari").Where(sc => sc.Id == id).First();
+            sb.Categ = GetAllCategories();
             return View(sb);
         }
         [HttpPost]
         public ActionResult Edit(int id, SubCategorie requestedSb)
         {
             SubCategorie sb = db.SubCategorii.Find(id);
-            if (ModelState.IsValid)
+            var sanitizer = new HtmlSanitizer();
+           if (ModelState.IsValid)
             {
+                requestedSb.Description = sanitizer.Sanitize(requestedSb.Description);
                 sb.Title = requestedSb.Title;
                 sb.CategorieId = requestedSb.CategorieId;
+                sb.Description = requestedSb.Description;
                 db.SaveChanges();
                 TempData["message"] = "Subcategoria a fost modificata!";
                 return RedirectToAction("Index");
             }
             else
             {
+                requestedSb.Categ = GetAllCategories();
                 return View(requestedSb);
             }
         }

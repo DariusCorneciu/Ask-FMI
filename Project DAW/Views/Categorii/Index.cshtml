@@ -67,7 +67,12 @@
                 @if(ViewBag.EsteAdmin == true)
                 {
                     <div class="align-items-center justify-content-center d-flex">
-                        <a class="btn btn-danger" href="/Categorii/Delete/@categorie.Id">Sterge aceasta categorie</a>
+                        <form method="post" action="/Categorii/Delete/@categorie.Id">
+                            <button class="btn btn-danger" type="submit">Sterge categoria</button>
+                        </form>
+                    </div>
+                    <div class="align-items-center justify-content-center d-flex">
+                        <a class="btn btn-success" href="/Categorii/Edit/@categorie.Id">Editeaza aceasta categorie</a>
                     </div>
                 }
             }

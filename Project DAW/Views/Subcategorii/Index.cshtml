@@ -7,7 +7,7 @@
 @if (ViewBag.EsteAdmin == true)
 {
     <div class="align-items-center justify-content-center d-flex">
-        <a class="btn btn-success" href="/Categorii/New">Adauga o noua categorie</a>
+        <a class="btn btn-success" href="/SubCategorii/New">Adauga o noua subcategorie</a>
     </div>
 }
 <br />
@@ -66,8 +66,14 @@
             @if (ViewBag.EsteAdmin == true)
             {
                 <div class="align-items-center justify-content-center d-flex">
-                    <a class="btn btn-danger" href="/SubCategorii/Delete/@subCategorie.Id">Sterge aceasta subcategorie</a>
+                    <form method="post" action="/SubCategorii/Delete/@subCategorie.Id">
+                        <button class="btn btn-danger" type="submit">Sterge subcategoria</button>
+                    </form>
                 </div>
+                <div class="align-items-center justify-content-center d-flex">
+                    <a class="btn btn-success" href="/SubCategorii/Edit/@subCategorie.Id">Editeaza aceasta subcategorie</a>
+                </div>
+            }
             }
 
         </div>

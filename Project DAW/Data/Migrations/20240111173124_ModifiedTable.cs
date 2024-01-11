@@ -4,7 +4,7 @@
 
 namespace Project_DAW.Data.Migrations
 {
-    public partial class FixSubcateg : Migration
+    public partial class ModifiedTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

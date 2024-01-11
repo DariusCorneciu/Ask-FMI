@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Register";
 }
+@{
+}
 
 <section class="vh-100 bg-image" id="poza_register">
     <div class="mask d-flex align-items-center h-100 gradient-custom-3">
@@ -46,7 +48,16 @@
                 <label asp-for="Input.ConfirmPassword">Confirma parola</label>
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
-                                <br />
+                                <div class="form-floating">
+                                    <select asp-for="Input.Role" class="form-control" aria-required="true"
+                                            asp-items="@(new SelectList(Model.DropDown, "Value", "Text"))" autocomplete="off">
+                                        <option value="">Selectați un rol</option>
+                                    </select>
+                                    <label asp-for="Input.Role">Rol</label>
+                                    <span asp-validation-for="Input.Role" class="text-danger"></span>
+                                </div>
+
+            <br />
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Inregistreaza-te</button>
         </form>
     </div>

@@ -12,8 +12,8 @@ using Project_DAW.Data;
 namespace Project_DAW.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231224151631_DescSubcateg")]
-    partial class DescSubcateg
+    [Migration("20240111173124_ModifiedTable")]
+    partial class ModifiedTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

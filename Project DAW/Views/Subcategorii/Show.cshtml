@@ -55,6 +55,17 @@
                 </div>
 
             }
+        @if (ViewBag.EsteAdmin == true)
+        {
+            <div class="align-items-center justify-content-center d-flex">
+                <form method="post" action="/SubCategorii/Delete/@Model.Id">
+                    <button class="btn btn-danger" type="submit">Sterge subcategoria</button>
+                </form>
+            </div>
+            <div class="align-items-center justify-content-center d-flex">
+                <a class="btn btn-success" href="/SubCategorii/Edit/@Model.Id">Editeaza aceasta subcategorie</a>
+            </div>
+        }
         <div>
             <nav aria-label="Page navigation example">
                 <ul class="pagination">

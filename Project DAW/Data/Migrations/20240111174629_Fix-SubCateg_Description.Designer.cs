@@ -12,8 +12,8 @@ using Project_DAW.Data;
 namespace Project_DAW.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231224151147_FixSubcateg")]
-    partial class FixSubcateg
+    [Migration("20240111174629_Fix-SubCateg_Description")]
+    partial class FixSubCateg_Description
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -385,6 +385,9 @@ namespace Project_DAW.Data.Migrations
 
                     b.Property<int>("CategorieId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

@@ -7,11 +7,15 @@
 {
     @Html.Label("Title", "Denumire SubCategorie")
     <br />
-    @Html.Editor("Title")
+    @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
 
     @Html.ValidationMessageFor(m => m.Title, null, new { @class = "text-danger" })
     <br />
+    <label>Selectati categoria</label>
 
+    @Html.DropDownListFor(m => m.CategorieId, new SelectList(Model.Categ, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.CategorieId, null, new { @class = "text-danger" })
+    <br />
     <br />
 
     <button class="btn btn-success" type="submit">Modifica subcategorie</button>

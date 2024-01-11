@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ganss.Xss;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -60,7 +61,6 @@ namespace Project_DAW.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult New() 
         {
-
             return View();
         }
         [HttpPost]

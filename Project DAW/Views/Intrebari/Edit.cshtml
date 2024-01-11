@@ -19,9 +19,9 @@
 
                 <br />
 
-                @Html.Label("Content", "Continut intrebare")
+                @Html.Label("Continut", "Continut intrebare")
                 <br />
-                @Html.Editor("Content", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.Editor("Continut", new { htmlAttributes = new { @class = "form-control" } })
 
                 @Html.ValidationMessageFor(m => m.Continut, null, new { @class = "text-danger" })
                 <br />
@@ -30,7 +30,7 @@
 
                 <label>Selectati categoria</label>
 
-                @Html.DropDownListFor(m => m.SubCateg, new SelectList(Model.SubCateg, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
+                @Html.DropDownListFor(m => m.SubCategorieId, new SelectList(Model.SubCateg, "Value", "Text"), "Selectati categoria", new { @class = "form-control" })
                 @Html.ValidationMessageFor(m => m.SubCategorieId, null, new { @class = "text-danger" })
                 <br />
 

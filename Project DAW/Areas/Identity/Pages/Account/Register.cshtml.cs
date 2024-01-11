@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -16,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Project_DAW.Models;
@@ -45,6 +47,7 @@ namespace Project_DAW.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
         }
+
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -103,13 +106,24 @@ namespace Project_DAW.Areas.Identity.Pages.Account
             public string FirstName { get; set; }
             [Required(ErrorMessage = "Nu poti lasa campul gol")]
             public string LastName { get; set; }    
+            public string Role { get; set; }
+            [NotMapped]
+            public IEnumerable<SelectListItem>? Rol { get; set; }
         }
-
-
+        [BindProperty]
+        public List<SelectListItem> DropDown { get; set; }
         public async Task OnGetAsync(string returnUrl = null)
         {
+            DropDown = new List<SelectListItem>
+                {
+                    new SelectListItem { Value = "Admitere", Text = "Admitere" },
+                    new SelectListItem { Value = "Licenta", Text = "Licenta" },
+                    new SelectListItem { Value = "Master", Text = "Master" }
+                };
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+
+
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
@@ -127,6 +141,21 @@ namespace Project_DAW.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName.Substring(0,1).ToUpper() + Input.FirstName.Substring(1).ToLower();
                 user.LastName = Input.LastName.Substring(0, 1).ToUpper() + Input.LastName.Substring(1).ToLower();
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                switch (Input.Role)
+                {
+                    case "Admitere":
+                        user.Admitere = true;
+                        break;
+                    case "Licenta":
+                        user.Licenta = true;
+                        break;
+                    case "Master":
+                        user.Master = true;
+                        break;
+                    default:
+                        break;
+                }
 
                 if (result.Succeeded)
                 {
