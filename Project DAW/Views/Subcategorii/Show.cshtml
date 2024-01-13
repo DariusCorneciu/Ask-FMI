@@ -42,7 +42,7 @@
                     <div class="subcategD-info subcategD-column">
                         @if (User.IsInRole("User"))
                         {
-                            <b><a href="/Comentarii/New">Fii tu primul care ofera un raspuns</a></b>
+                            <b><a href="/Comentarii/New/@intrebare.Id">[@intrebare.Id]Fii tu primul care ofera un raspuns</a></b>
                         }
                         else
                         {

@@ -42,7 +42,7 @@ namespace Project_DAW.Controllers
         public ActionResult Show(int id)
         {
             SubCategorie subcategorie = db.SubCategorii.Find(id);
-            var questions = db.Intrebari.Include(i => i.Comentarii).Include(u => u.User).Where(i => i.SubCategorieId == subcategorie.Id);
+            var questions = db.Intrebari.Include(i => i.Comentarii).ThenInclude(uc=>uc.User).Include(u => u.User).Where(i => i.SubCategorieId == subcategorie.Id);
             int _perPage = 5;
             int totalQuestions = 0;
             var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Project_DAW.Data;
 using Project_DAW.Models;
 
@@ -42,6 +43,38 @@ namespace Project_DAW.Controllers
                 TempData["NoAcces"] = "Nu ai acces sa stergi acest comentariu";
                 TempData["type"] = "alert-danger";
                 return Redirect("/Intrebari/Index");
+            }
+        }
+
+
+        public IActionResult New(int id)
+        {
+            Intrebare Intrebare = db.Intrebari.Include(u => u.User).Where(i => i.Id == id).First();
+            ViewBag.Intrebare = Intrebare;
+
+            Comentariu newcomment = new Comentariu();
+            return View(newcomment);
+        }
+        [HttpPost]
+        public IActionResult New([FromForm]Comentariu newcom)
+        {
+           newcom.Date = DateTime.Now;
+            newcom.UserId = _userManager.GetUserId(User);
+            newcom.User = db.Users.Where(u => u.Id == newcom.UserId).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                db.Comentarii.Add(newcom);
+                db.SaveChanges();
+                return Redirect("/Intrebari/Show/" + newcom.IntrebareId);
+            }
+            else
+            {
+                Intrebare Intrebare = db.Intrebari.Include(u => u.User).Where(i => i.Id == newcom.IntrebareId).First();
+                ViewBag.Intrebare = Intrebare;
+
+                return View(newcom);
+
             }
         }
 

@@ -63,9 +63,10 @@ namespace Project_DAW.Controllers
                                 .ThenInclude(c => c.User)
                                 .Include(q => q.User)
                                 .Include(q => q.Raspuns)
+                                .ThenInclude(c => c.User)
                                 .Where(q => q.Id == id)
                                 .First();
-            ViewBag.Intoarcere = TempData["Source"];
+           // ViewBag.Intoarcere = TempData["Source"];
 
             ApplicationUser currentuser = db.Users.Find(_userManager.GetUserId(User));
             ViewBag.current = currentuser;
@@ -86,7 +87,6 @@ namespace Project_DAW.Controllers
                 db.Comentarii.Add(comentariu);
                 db.SaveChanges();
                 GetRole();
-                TempData["Test"] = "Este valid" + comentariu.Date+comentariu.IntrebareId+" "+ comentariu.Id;
                 return Redirect("/Intrebari/Show/"+comentariu.IntrebareId);
             }
             else
