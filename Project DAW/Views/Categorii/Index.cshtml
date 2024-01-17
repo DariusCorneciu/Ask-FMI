@@ -51,12 +51,14 @@
                     }
                     else
                     {
-                        <div class="subforum-info subforum-column">
+                        @if (subcateg.Intrebari.Count() == 0)
+                        {
+                            <div class="subforum-info subforum-column">
 
                             <b><a href="/Intrebari/New?idsc=@subcateg.Id">Pune prima Intrebare</a></b>
 
                         </div>
-                        
+                        }
                     }
 
                 </div>

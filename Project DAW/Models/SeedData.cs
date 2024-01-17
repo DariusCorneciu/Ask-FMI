@@ -34,7 +34,6 @@ namespace Project_DAW.Models
                     context.SaveChanges();
 
                 }
-
                 // CREAREA ROLURILOR IN BD
                 // daca nu contine roluri, acestea se vor crea
                 context.Roles.AddRange(

@@ -67,7 +67,6 @@ namespace  Project_DAW.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string UploadProfilePicture => "UploadProfilePicture";
 
-        public static string ChangeRoleAccount => "ChangeRoleAccount";
 
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
@@ -119,7 +118,6 @@ namespace  Project_DAW.Areas.Identity.Pages.Account.Manage
         /// </summary>
         public static string UploadProfilePictureNavClass(ViewContext viewContext) => PageNavClass(viewContext, UploadProfilePicture);
 
-        public static string ChangeRoleAccountNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangeRoleAccount);
         public static string PageNavClass(ViewContext viewContext, string page)
         {
             var activePage = viewContext.ViewData["ActivePage"] as string

@@ -7,7 +7,14 @@
 }
 <br />
 
-    <div class="container-subcateg">
+<div>
+    <a href="/SubCategorii/Show/@Model.Id?sort=Comments&order=asc">Sort by Comments Asc</a> |
+    <a href="/SubCategorii/Show/@Model.Id?sort=Comments&order=desc">Sort by Comments Desc</a> |
+    <a href="/SubCategorii/Show/@Model.Id?sort=IsOpen">Sort by Answered</a> |
+    <a href="/SubCategorii/Show/@Model.Id?sort=NotOpen">Sort by Not Answered</a>
+</div>
+
+<div class="container-subcateg">
         <div class="subcategD">
             <div class="subcategD-title">
                 <h1>@Model.Title</h1>
@@ -40,9 +47,9 @@
                 else
                 {
                     <div class="subcategD-info subcategD-column">
-                        @if (User.IsInRole("User"))
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <b><a href="/Comentarii/New/@intrebare.Id">[@intrebare.Id]Fii tu primul care ofera un raspuns</a></b>
+                            <b><a href="/Comentarii/New/@intrebare.Id">Fii tu primul care ofera un raspuns</a></b>
                         }
                         else
                         {
