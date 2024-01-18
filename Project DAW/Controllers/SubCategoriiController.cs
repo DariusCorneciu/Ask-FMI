@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Project_DAW.Data;
+using Project_DAW.Data.Migrations;
 using Project_DAW.Models;
 
 namespace Project_DAW.Controllers
@@ -43,8 +44,33 @@ namespace Project_DAW.Controllers
         {
             SubCategorie subcategorie = db.SubCategorii.Find(id);
             var questions = db.Intrebari.Include(i => i.Comentarii).ThenInclude(uc=>uc.User).Include(u => u.User).Where(i => i.SubCategorieId == subcategorie.Id);
+            var sortProperty = Convert.ToString(HttpContext.Request.Query["sort"]);
+            var sortOrder = Convert.ToString(HttpContext.Request.Query["order"]);
+            switch (sortProperty)
+            {
+                case "Comments":
+                    if (sortOrder == "desc")
+                    {
+                        
+                        questions = questions.Include(i => i.Comentarii).OrderByDescending(i => i.Comentarii.Count());
+                    }
+                    else
+                    {
+                        questions = questions.Include(i => i.Comentarii).OrderBy(i => i.Comentarii.Count());
+                    }
+                    break;
+                case "IsOpen":
+                    questions = questions.Where(i => !i.IsOpen).OrderBy(i => i.Name);
+                    break;
+                case "NotOpen":
+                    questions = questions.Where(i => i.IsOpen).OrderBy(i => i.Name);
+                    break;
+                default:
+                    questions = questions.OrderBy(i => i.Name);
+                    break;
+            }
             int _perPage = 5;
-            int totalQuestions = 0;
+            int totalQuestions = questions.Count();
             var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
             var offset = 0;
             if(!currentPage.Equals(0))
@@ -118,7 +144,7 @@ namespace Project_DAW.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            SubCategorie sb = db.SubCategorii.Include("Intrebari").Where(sc => sc.Id == id).First();
+            SubCategorie sb = db.SubCategorii.Include(i => i.Intrebari).ThenInclude(i => i.Comentarii).Where(sc => sc.Id == id).First();
             db.SubCategorii.Remove(sb);
             TempData["message"] = "Subcategoria a fost stearsa";
             db.SaveChanges();

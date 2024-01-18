@@ -7,6 +7,14 @@
 }
 <br />
 
+
+<div>
+    <a href="/Intrebari/Index?sort=Comments&order=asc">Sort by Comments Asc</a> |
+    <a href="/Intrebari/Index?sort=Comments&order=desc">Sort by Comments Desc</a> |
+    <a href="/Intrebari/Index?sort=IsOpen">Sort by Answered</a> |
+    <a href="/Intrebari/Index?sort=NotOpen">Sort by Not Answered</a>
+</div> 
+
 @foreach (Project_DAW.Models.Intrebare intrebare in ViewBag.Questions)
 {
     <div class="subcategD-row">
@@ -22,7 +30,7 @@
             <p>@intrebare.Continut</p>
         </div>
         <div class="subcategD-stats subcategD-column center">
-            <span>@intrebare.Comentarii.Count() Comenatarii</span>
+            <span>@intrebare.Comentarii.Count() Comentarii</span>
         </div>
         @if (intrebare.Comentarii.Count() > 0)
         {
@@ -36,7 +44,7 @@
         {
             <div class="subcategD-info subcategD-column">
 
-                <b><a href="/Comentarii/New">Fii tu primul care ofera un raspuns</a></b>
+                <b><a href="/Comentarii/New/@intrebare.Id">Fii tu primul care ofera un raspuns</a></b>
 
             </div>
 
@@ -49,18 +57,19 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li class="page-item">
-                <a class="page-link" href="/Intrebari/Index?page=1" aria-label="Previous">
+                <a class="page-link" href="@ViewBag.PaginationBaseUrl=1" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
+
             @for (int i = 1; i <= ViewBag.lastPage; i++)
             {
                 <li class="page-item">
-                    <a class="page-link" href="/Intrebari/Index?page=@i">@(i)</a>
+                    <a class="page-link" href="@ViewBag.PaginationBaseUrl=@i">@(i)</a>
                 </li>
             }
             <li class="page-item">
-                <a class="page-link" href="/Intrebari/Index?page=@ViewBag.lastPage" aria-label="Next">
+                <a class="page-link" href="@ViewBag.PaginationBaseUrl=@(ViewBag.lastPage)" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

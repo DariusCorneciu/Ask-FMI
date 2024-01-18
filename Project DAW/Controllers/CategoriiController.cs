@@ -45,7 +45,7 @@ namespace Project_DAW.Controllers
             Categorie category = db.Categorii.Find(id);
             var subcategorii = db.SubCategorii.Include(u => u.Intrebari).ThenInclude(u => u.User).Where(sc => sc.CategorieId == category.Id);
             int _perPage = 5;
-            int totalSC = 0;
+            int totalSC = subcategorii.Count();
             var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
             var offset = 0;
             if(!currentPage.Equals(0))
@@ -125,7 +125,7 @@ namespace Project_DAW.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Delete(int id)
         {
-            Categorie categorie = db.Categorii.Include(c => c.SubCategorii).Where(c => c.Id == id).First();
+            Categorie categorie = db.Categorii.Include(c => c.SubCategorii).ThenInclude(i => i.Intrebari).ThenInclude(i=>i.Comentarii).Where(c => c.Id == id).First();
             db.Categorii.Remove(categorie);
             TempData["message"] = "Categoria a fost stearsa";
             db.SaveChanges();

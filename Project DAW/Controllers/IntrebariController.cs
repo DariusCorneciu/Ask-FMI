@@ -39,19 +39,64 @@ namespace Project_DAW.Controllers
                 ViewBag.Message = TempData["message"];
                 ViewBag.Alert = TempData["messageType"];
             }
-            var questions = db.Intrebari.Include(i => i.Comentarii).Include(u => u.User).OrderBy(i => i.Name);
+
+            var intrebari = db.Intrebari.Include(i => i.SubCategorie).Include(i => i.Comentarii).Include(i => i.User).OrderBy(i => i.Date);
+            var search = "";
+            var sortProperty = Convert.ToString(HttpContext.Request.Query["sort"]);
+            var sortOrder = Convert.ToString(HttpContext.Request.Query["order"]);
+            switch (sortProperty)
+            {
+                case "Comments":
+                    if (sortOrder == "desc")
+                    {
+                        var intrebariComentarii = intrebari.Include(i => i.Comentarii).OrderByDescending(i => i.Comentarii.Count()).ToList();
+                        intrebari =intrebari.Include(i => i.Comentarii).OrderByDescending(i => i.Comentarii.Count());
+                    }
+                    else
+                    {
+                        intrebari = intrebari.Include(i => i.Comentarii).OrderBy(i => i.Comentarii.Count());
+                    }
+                    break;
+                case "IsOpen":
+                    intrebari = intrebari.Where(i => !i.IsOpen).OrderBy(i => i.Name);
+                    break;
+                case "NotOpen":
+                    intrebari = intrebari.Where(i => i.IsOpen).OrderBy(i => i.Name);
+                    break;
+                default:
+                    intrebari = intrebari.OrderBy(i => i.Name);
+                    break;
+            }
+            if (Convert.ToString(HttpContext.Request.Query["search"]) != null)
+            {
+                search = Convert.ToString(HttpContext.Request.Query["search"]).Trim();
+                List<int> questionsSearch = db.Intrebari.Where(i => i.Name.Contains(search)).Select(i => i.Id).ToList();
+                List<int> questionswithCommentswithSearchString = db.Comentarii.Include(c=> c.User).Where(c => c.Continut.Contains(search)).Select(c => (int)c.IntrebareId).ToList();
+                List<int> mergedIDs = questionsSearch.Union(questionswithCommentswithSearchString).ToList();
+                intrebari = db.Intrebari.Include(i => i.Comentarii).Include(i => i.User).Where(i => mergedIDs.Contains(i.Id)).OrderBy(i => i.Comentarii.Count());
+            }
+
+            ViewBag.SearchString = search;
             int _perPage = 5;
-            int totalQuestions = 0;
+            int totalQuestions = intrebari.Count();
             var currentPage = Convert.ToInt32(HttpContext.Request.Query["page"]);
             var offset = 0;
             if (!currentPage.Equals(0))
             {
                 offset = (currentPage - 1) * _perPage;
             }
-            var paginatedQuestions = questions.Skip(offset).Take(_perPage);
+            var paginatedQuestions = intrebari.Skip(offset).Take(_perPage);
             ViewBag.lastPage = Math.Ceiling((float)totalQuestions / (float)_perPage);
             ViewBag.Questions = paginatedQuestions;
             SetAccessRights();
+            if(search != "")
+            {
+                ViewBag.PaginationBaseURL = "/Intrebari/Index/?search=" + search + "&page" ;
+            }
+            else
+            {
+                ViewBag.PaginationBaseUrl = "/Intrebari/Index/?page";
+            }
             return View();
         }
         public IActionResult Show(int id)
@@ -267,7 +312,11 @@ namespace Project_DAW.Controllers
         public async Task<String> GetType()
         {
             var user = await _userManager.GetUserAsync(User);
-           if(user.Admitere != false)
+            if (User.IsInRole("Admin"))
+            {
+                return "Admin";
+            }
+            if (user.Admitere != false)
             {
                 return "Admitere";
             }
@@ -279,13 +328,8 @@ namespace Project_DAW.Controllers
             {
                 return "Master";
             }
-            if(User.IsInRole("Admin"))
-            {
-                return "Admin";
-            }
             return "Your Website does not contain any role";
         }
-
 
 
         public IEnumerable<SelectListItem> GetAllCategories(string rol)

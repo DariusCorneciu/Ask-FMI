@@ -20,7 +20,10 @@
             <div class="subforum-title">
                 <h1>@subCategorie.Title</h1>
             </div>
-            @foreach (Project_DAW.Models.Intrebare intrebare in subCategorie.Intrebari)
+            @{
+                var intrebari_sortate = subCategorie.Intrebari.OrderBy(s => s.Comentarii.Count()).Take(5);
+            }
+            @foreach (Project_DAW.Models.Intrebare intrebare in intrebari_sortate)
             {
                 <div class="subforum-row">
                     <div class="subforum-icon subforum-column center">
@@ -31,11 +34,11 @@
 
                     </div>
                     <div class="subforum-description subforum-column">
-                        <a class="btn title-size text-decoration-underline" href="/Intrebarii/Show/@intrebare.Id">@intrebare.Name</a>
+                        <a class="btn title-size text-decoration-underline" href="/Intrebari/Show/@intrebare.Id">@intrebare.Name</a>
                         <p>@intrebare.Continut</p>
                     </div>
                     <div class="subforum-stats subforum-column center">
-                        <span>@intrebare.Comentarii.Count() Intrebari</span>
+                        <span>@intrebare.Comentarii.Count() Comentarii</span>
                     </div>
                     @if (intrebare.Comentarii.Count() > 0)
                     {
@@ -48,21 +51,27 @@
                     }
                     else
                     {
-                        <div class="subforum-info subforum-column">
-
-                            <b><a href="/Intrebari/New?idsc=@@subCategorie.Id">Pune prima Intrebare</a></b>
-
+                        <div class="subcategD-info subcategD-column">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <b><a href="/Comentarii/New/@intrebare.Id">Fii tu primul care ofera un raspuns</a></b>
+                            }
+                            else
+                            {
+                                <b><a href="/Identity/Account/Login">Fii tu primul care ofera un raspuns</a></b>
+                            }
                         </div>
 
                     }
      
                 </div>
-                @if (subCategorie.Intrebari.Count() > 5)
-                {
-                    <a href="/SubCategorii/Show/@subCategorie.Id" class="btn btn-primary">Afișează toate intrebarile din aceasta subcategorie</a>
-                }
 
             }
+            @if (subCategorie.Intrebari.Count() > 5)
+            {
+                <a href="/SubCategorii/Show/@subCategorie.Id" class="btn btn-primary">Afișează toate intrebarile din aceasta subcategorie</a>
+            }
+
             @if (ViewBag.EsteAdmin == true)
             {
                 <div class="align-items-center justify-content-center d-flex">
@@ -73,7 +82,6 @@
                 <div class="align-items-center justify-content-center d-flex">
                     <a class="btn btn-success" href="/SubCategorii/Edit/@subCategorie.Id">Editeaza aceasta subcategorie</a>
                 </div>
-            }
             }
 
         </div>
